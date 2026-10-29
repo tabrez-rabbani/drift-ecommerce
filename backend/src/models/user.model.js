@@ -65,6 +65,9 @@ const userSchema = new mongoose.Schema({
     verificationTokenExpire: {
         type: Date,
     },
+    lastVerificationSentAt: {
+        type: Date,
+    },
 }, { timestamps: true });
 
 userSchema.pre("save", async function () {

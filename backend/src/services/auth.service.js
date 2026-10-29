@@ -39,6 +39,7 @@ export const registerUserService = async (userData) => {
         isVerified: false,
         verificationToken: hashedToken,
         verificationTokenExpire: Date.now() + 24 * 60 * 60 * 1000,
+        lastVerificationSentAt: new Date(),
     });
 
     const verificationUrl = `${config.BACKEND_URL}/api/auth/verify-email?token=${rawToken}`;
@@ -87,7 +88,8 @@ export const resendVerificationService = async (email) => {
         throw new AppError("Email is required", 400);
     }
 
-    const user = await findUserByEmail(email);
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await findUserByEmail(cleanEmail);
     if (!user) {
         throw new AppError("No account found with this email", 404);
     }
@@ -96,11 +98,21 @@ export const resendVerificationService = async (email) => {
         throw new AppError("Account is already verified. Please log in.", 400);
     }
 
+    const COOLDOWN_SECONDS = 60;
+    if (user.lastVerificationSentAt) {
+        const secondsElapsed = Math.floor((Date.now() - new Date(user.lastVerificationSentAt).getTime()) / 1000);
+        if (secondsElapsed < COOLDOWN_SECONDS) {
+            const remaining = COOLDOWN_SECONDS - secondsElapsed;
+            throw new AppError(`Please wait ${remaining}s before requesting another verification email.`, 429);
+        }
+    }
+
     const rawToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
 
     user.verificationToken = hashedToken;
     user.verificationTokenExpire = Date.now() + 24 * 60 * 60 * 1000;
+    user.lastVerificationSentAt = new Date();
     await user.save();
 
     const verificationUrl = `${config.BACKEND_URL}/api/auth/verify-email?token=${rawToken}`;
@@ -214,6 +226,9 @@ export const googleLoginService = async (profile, state = "user") => {
         if (user) {
             user.googleId = id;
             user.profilePic = profilePic;
+            user.isVerified = true;
+            user.verificationToken = undefined;
+            user.verificationTokenExpire = undefined;
             await user.save();
         } else {
             if (state === "admin") {
@@ -228,6 +243,11 @@ export const googleLoginService = async (profile, state = "user") => {
                 role: "buyer",
             });
         }
+    } else if (!user.isVerified) {
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationTokenExpire = undefined;
+        await user.save();
     }
 
     if (state === "admin" && user.role !== "admin") {

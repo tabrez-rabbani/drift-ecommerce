@@ -37,3 +37,8 @@ export function redirectToGoogleAuth() {
   const apiUrl = getApiBaseUrl();
   window.location.href = `${apiUrl}/auth/google`;
 }
+
+export async function resendVerificationEmail(email) {
+  const response = await api.post("/auth/resend-verification", { email });
+  return response.data;
+}

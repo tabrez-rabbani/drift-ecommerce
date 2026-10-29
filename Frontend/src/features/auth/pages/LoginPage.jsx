@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams, useLocation } from "react-router-do
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../hooks/useAuth";
+import { resendVerificationEmail } from "../services/auth.api";
 import { Button } from "../../../components/ui";
 import styles from "./LoginPage.module.css";
 
@@ -10,11 +11,21 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const { handleLogin, handleGoogleLogin, isAuthenticated, loading, isInitialized, user } = useAuth();
+  const { handleLogin, handleGoogleLogin, isAuthenticated, loading, isInitialized, user, error } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setInterval(() => {
+      setResendCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendCooldown]);
 
   useEffect(() => {
     const verified = searchParams.get("verified");
@@ -37,6 +48,40 @@ export default function LoginPage() {
       navigate(from, { replace: true });
     }
   }, [isInitialized, isAuthenticated, user, navigate, location]);
+
+  const handleResendVerification = async () => {
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
+      toast.warning("Please enter your email address to receive an activation link.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      toast.warning("Please enter a valid email address.");
+      return;
+    }
+
+    if (resendCooldown > 0) {
+      toast.warning(`Please wait ${resendCooldown}s before requesting another verification email.`);
+      return;
+    }
+
+    try {
+      setResendLoading(true);
+      const data = await resendVerificationEmail(cleanEmail);
+      toast.success(data.message || "Verification link sent! Please check your inbox.");
+      setResendCooldown(60);
+    } catch (err) {
+      toast.error(err.message || "Failed to send verification email.");
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  const isVerificationIssue =
+    searchParams.get("error") === "verification_failed" ||
+    (Boolean(error) && error.toLowerCase().includes("verify your email"));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,6 +130,22 @@ export default function LoginPage() {
 
         <div className={styles.formPanel}>
           <h2 className={styles.formPanel__title}>Sign in to your account</h2>
+
+          {isVerificationIssue && (
+            <div className={styles.verificationAlert}>
+              <p className={styles.verificationAlertText}>
+                Need a fresh activation link for your account?
+              </p>
+              <button
+                type="button"
+                onClick={handleResendVerification}
+                disabled={resendLoading || resendCooldown > 0}
+                className={styles.verificationAlertBtn}
+              >
+                {resendLoading ? "Sending..." : resendCooldown > 0 ? `Wait ${resendCooldown}s` : "Send Link"}
+              </button>
+            </div>
+          )}
 
           <form className={styles.form} onSubmit={handleSubmit} noValidate>
             <div className={styles.field}>
@@ -135,6 +196,18 @@ export default function LoginPage() {
               >
                 Sign In
               </Button>
+            </div>
+
+            <div className={styles.resendPrompt}>
+              <span className={styles.resendText}>Didn&apos;t receive activation email?</span>
+              <button
+                type="button"
+                onClick={handleResendVerification}
+                disabled={resendLoading || resendCooldown > 0}
+                className={styles.resendLinkBtn}
+              >
+                {resendLoading ? "Sending..." : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend link"}
+              </button>
             </div>
           </form>
 
