@@ -24,9 +24,8 @@ export const useAuth = () => {
       try {
         dispatch(setLoading(true));
         const data = await registerUser({ name, email, password, phone });
-        dispatch(setUser(data.user));
-        toast.success("Account created successfully!");
-        return data.user;
+        toast.success(data.message || "Account created! Please check your email to activate.");
+        return true;
       } catch (err) {
         const message = err.message || "Registration failed";
         dispatch(setError(message));

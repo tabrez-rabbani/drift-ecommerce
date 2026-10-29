@@ -63,12 +63,16 @@ export default function RegisterPage() {
       return;
     }
 
-    await handleRegister({
+    const success = await handleRegister({
       name: cleanName,
       email: cleanEmail,
       password,
       phone: cleanPhone,
     });
+
+    if (success) {
+      navigate("/login?registered=true", { replace: true });
+    }
   };
 
   const onGoogleLogin = () => {

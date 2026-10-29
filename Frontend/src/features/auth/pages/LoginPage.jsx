@@ -17,8 +17,17 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
+    const verified = searchParams.get("verified");
+    const registered = searchParams.get("registered");
     const errorParam = searchParams.get("error");
-    if (errorParam === "unauthorized") {
+
+    if (verified === "true") {
+      toast.success("Email verified successfully! You can now log in.");
+    } else if (registered === "true") {
+      toast.info("Account created! Please check your email to activate your account.");
+    } else if (errorParam === "verification_failed") {
+      toast.error("Verification link is invalid or has expired.");
+    } else if (errorParam === "unauthorized") {
       toast.error("Google login failed. Your account may not be authorized.");
     } else if (errorParam === "google_failed") {
       toast.error("Google authentication failed. Please try again.");
