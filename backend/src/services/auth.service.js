@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import {
     createUser,
     findUserByEmail,
@@ -7,10 +8,12 @@ import {
     findUserByGoogleId,
     createGoogleUser,
 } from "../dao/user.dao.js";
+import userModel from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 import AppError from "../utils/AppError.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
+import { sendVerificationEmail } from "./mail.service.js";
 
 export const registerUserService = async (userData) => {
     const { name, email, password, phone } = userData;
@@ -24,24 +27,86 @@ export const registerUserService = async (userData) => {
         throw new AppError(message, 409);
     }
 
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+
     const user = await createUser({
         name,
         email,
         password,
         phone,
         role: "buyer",
+        isVerified: false,
+        verificationToken: hashedToken,
+        verificationTokenExpire: Date.now() + 24 * 60 * 60 * 1000,
     });
 
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const verificationUrl = `${config.BACKEND_URL}/api/auth/verify-email?token=${rawToken}`;
 
-    await updateRefreshToken(user._id, refreshToken);
+    try {
+        await sendVerificationEmail({ to: email, name, verificationUrl });
+    } catch (err) {
+        console.error("Failed to send verification email:", err);
+    }
 
     const userResponse = user.toObject();
     delete userResponse.password;
     delete userResponse.refreshToken;
+    delete userResponse.verificationToken;
+    delete userResponse.verificationTokenExpire;
 
-    return { userResponse, accessToken, refreshToken };
+    return { userResponse };
+};
+
+export const verifyEmailService = async (rawToken) => {
+    if (!rawToken) {
+        throw new AppError("Verification token is missing", 400);
+    }
+
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+
+    const user = await userModel.findOne({
+        verificationToken: hashedToken,
+        verificationTokenExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        throw new AppError("Invalid or expired verification link", 400);
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    user.verificationTokenExpire = undefined;
+    await user.save();
+
+    return user;
+};
+
+export const resendVerificationService = async (email) => {
+    if (!email) {
+        throw new AppError("Email is required", 400);
+    }
+
+    const user = await findUserByEmail(email);
+    if (!user) {
+        throw new AppError("No account found with this email", 404);
+    }
+
+    if (user.isVerified) {
+        throw new AppError("Account is already verified. Please log in.", 400);
+    }
+
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+
+    user.verificationToken = hashedToken;
+    user.verificationTokenExpire = Date.now() + 24 * 60 * 60 * 1000;
+    await user.save();
+
+    const verificationUrl = `${config.BACKEND_URL}/api/auth/verify-email?token=${rawToken}`;
+    await sendVerificationEmail({ to: user.email, name: user.name, verificationUrl });
+
+    return { message: "Verification link sent. Please check your inbox." };
 };
 
 export const loginService = async (userData) => {
@@ -57,6 +122,10 @@ export const loginService = async (userData) => {
 
     if (!isPasswordMatched) {
         throw new AppError("Invalid credentials", 401);
+    }
+
+    if (user.role !== "admin" && user.isVerified === false && !user.googleId) {
+        throw new AppError("Please verify your email before logging in. Check your inbox for the activation link.", 403);
     }
 
     const accessToken = generateAccessToken(user);

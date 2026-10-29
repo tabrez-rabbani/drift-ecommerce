@@ -1,5 +1,16 @@
 import { Router } from "express";
-import { getMe, loginController, adminLoginController, logOut, registerController, refreshTokenController, googleCallback, updateProfile } from "../controllers/auth.controller.js";
+import {
+    getMe,
+    loginController,
+    adminLoginController,
+    logOut,
+    registerController,
+    refreshTokenController,
+    googleCallback,
+    updateProfile,
+    verifyEmailController,
+    resendVerificationController,
+} from "../controllers/auth.controller.js";
 import { loginValidator, registerValidator } from "../validators/authValidator.js";
 import { authenticateUser, optionalAuthenticateUser } from "../middlewares/authMiddleware.js";
 import { authLimiter } from "../middlewares/rateLimiter.js";
@@ -9,6 +20,8 @@ import { config } from "../config/config.js";
 const authRouter = Router();
 
 authRouter.post("/register", authLimiter, registerValidator, registerController);
+authRouter.get("/verify-email", verifyEmailController);
+authRouter.post("/resend-verification", authLimiter, resendVerificationController);
 authRouter.post("/login", authLimiter, loginValidator, loginController);
 authRouter.post("/admin-login", authLimiter, loginValidator, adminLoginController);
 authRouter.get("/get-me", optionalAuthenticateUser, getMe);

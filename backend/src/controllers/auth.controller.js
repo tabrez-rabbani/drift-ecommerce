@@ -1,5 +1,13 @@
 import jwt from "jsonwebtoken";
-import { loginService, loginAdminService, registerUserService, refreshAccessTokenService, googleLoginService } from "../services/auth.service.js";
+import {
+    loginService,
+    loginAdminService,
+    registerUserService,
+    refreshAccessTokenService,
+    googleLoginService,
+    verifyEmailService,
+    resendVerificationService,
+} from "../services/auth.service.js";
 import { updateRefreshToken } from "../dao/user.dao.js";
 import userModel from "../models/user.model.js";
 import AppError from "../utils/AppError.js";
@@ -32,6 +40,7 @@ const formatUser = (user) => ({
     email: user.email,
     phone: user.phone || "",
     role: user.role,
+    isVerified: user.isVerified ?? true,
     createdAt: user.createdAt,
     streetAddress: user.streetAddress || "",
     city: user.city || "",
@@ -41,15 +50,33 @@ const formatUser = (user) => ({
 });
 
 export const registerController = asyncHandler(async (req, res) => {
-    const { userResponse, accessToken, refreshToken } = await registerUserService(req.body);
-
-    res.cookie("accessToken", accessToken, accessCookieOptions);
-    res.cookie("refreshToken", refreshToken, refreshCookieOptions);
+    const { userResponse } = await registerUserService(req.body);
 
     res.status(201).json({
         success: true,
-        message: "User registered successfully",
+        message: "Registration successful! Please check your email to activate your account.",
         user: userResponse,
+    });
+});
+
+export const verifyEmailController = asyncHandler(async (req, res) => {
+    const { token } = req.query;
+
+    try {
+        await verifyEmailService(token);
+        return res.redirect(`${config.CLIENT_URL}/login?verified=true`);
+    } catch {
+        return res.redirect(`${config.CLIENT_URL}/login?error=verification_failed`);
+    }
+});
+
+export const resendVerificationController = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    const result = await resendVerificationService(email);
+
+    res.status(200).json({
+        success: true,
+        message: result.message,
     });
 });
 

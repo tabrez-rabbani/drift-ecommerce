@@ -14,6 +14,7 @@ const requiredEnvVars = [
     "GOOGLE_CLIENT_SECRET",
     "RAZORPAY_KEY_ID",
     "RAZORPAY_KEY_SECRET",
+    "RESEND_API_KEY"
 ];
 
 for (const envVar of requiredEnvVars) {
@@ -36,6 +37,9 @@ export const config = {
     RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
     RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
     RAZORPAY_WEBHOOK_SECRET: process.env.RAZORPAY_WEBHOOK_SECRET || process.env.RAZORPAY_KEY_SECRET,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    EMAIL_FROM: process.env.EMAIL_FROM || "Drift <onboarding@resend.dev>",
+    BACKEND_URL: process.env.BACKEND_URL || (process.env.NODE_ENV === "production" ? "https://drift-api.tabrezrabbani.in" : "http://localhost:5000"),
     CLIENT_URL: process.env.CLIENT_URL || "http://localhost:5173",
     ADMIN_URL: process.env.ADMIN_URL || "http://localhost:5175",
     COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || undefined,
