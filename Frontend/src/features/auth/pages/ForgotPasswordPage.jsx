@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
         {sent && (
           <div className={styles.successBanner}>
             <p className={styles.successBannerText}>
-              ✓ Reset link sent to <strong>{email}</strong>. Check your inbox and spam folder.
+              Reset link sent to <strong>{email}</strong>. Check your inbox and spam folder.
             </p>
           </div>
         )}

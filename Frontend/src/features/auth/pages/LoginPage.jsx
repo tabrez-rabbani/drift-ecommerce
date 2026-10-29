@@ -200,18 +200,6 @@ export default function LoginPage() {
                 Forgot password?
               </Link>
             </div>
-
-            <div className={styles.resendPrompt}>
-              <span className={styles.resendText}>Didn&apos;t receive activation email?</span>
-              <button
-                type="button"
-                onClick={handleResendVerification}
-                disabled={resendLoading || resendCooldown > 0}
-                className={styles.resendLinkBtn}
-              >
-                {resendLoading ? "Sending..." : resendCooldown > 0 ? `Resend in ${resendCooldown}s` : "Resend link"}
-              </button>
-            </div>
           </form>
 
           <div className={styles.divider}><span>or</span></div>
