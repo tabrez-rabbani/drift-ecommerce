@@ -116,3 +116,129 @@ export const sendVerificationEmail = async ({ to, name, verificationUrl }) => {
         html: htmlContent,
     });
 };
+
+export const sendPasswordResetEmail = async ({ to, name, resetUrl }) => {
+    const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reset your Drift password</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f8fafc;
+                color: #0f172a;
+            }
+            .wrapper {
+                max-width: 580px;
+                margin: 40px auto;
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+            .header {
+                background: #09090b;
+                padding: 28px 32px;
+                text-align: center;
+            }
+            .brand {
+                font-size: 24px;
+                font-weight: 800;
+                letter-spacing: 0.15em;
+                color: #ffffff;
+                margin: 0;
+                text-transform: uppercase;
+            }
+            .content {
+                padding: 36px 32px;
+            }
+            .title {
+                font-size: 20px;
+                font-weight: 700;
+                color: #0f172a;
+                margin: 0 0 16px;
+            }
+            .text {
+                font-size: 15px;
+                line-height: 1.6;
+                color: #475569;
+                margin: 0 0 24px;
+            }
+            .btn-container {
+                text-align: center;
+                margin: 32px 0;
+            }
+            .btn {
+                background-color: #09090b;
+                color: #ffffff !important;
+                display: inline-block;
+                padding: 14px 32px;
+                font-size: 15px;
+                font-weight: 600;
+                text-decoration: none;
+                border-radius: 8px;
+                letter-spacing: 0.02em;
+            }
+            .warning {
+                background: #fff7ed;
+                border: 1px solid #fed7aa;
+                border-radius: 8px;
+                padding: 14px 18px;
+                font-size: 13px;
+                color: #9a3412;
+                margin: 0 0 24px;
+                line-height: 1.5;
+            }
+            .footer {
+                padding: 24px 32px;
+                background: #f8fafc;
+                border-top: 1px solid #f1f5f9;
+                font-size: 13px;
+                color: #94a3b8;
+                line-height: 1.5;
+            }
+            .fallback-link {
+                color: #0284c7;
+                word-break: break-all;
+                font-size: 13px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="header">
+                <h1 class="brand">DRIFT</h1>
+            </div>
+            <div class="content">
+                <h2 class="title">Reset your password</h2>
+                <p class="text">Hi ${name || "there"},</p>
+                <p class="text">We received a request to reset the password for your Drift account. Click the button below to create a new password:</p>
+                <div class="btn-container">
+                    <a href="${resetUrl}" class="btn" target="_blank">Reset Password</a>
+                </div>
+                <div class="warning">
+                    ⏱ This link expires in <strong>15 minutes</strong>. If you did not request a password reset, please ignore this email — your password will not be changed.
+                </div>
+            </div>
+            <div class="footer">
+                <p style="margin: 0 0 8px;">If the button above does not work, paste this URL into your browser:</p>
+                <a href="${resetUrl}" class="fallback-link">${resetUrl}</a>
+                <p style="margin: 16px 0 0; font-size: 12px;">© ${new Date().getFullYear()} DRIFT. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+
+    return await resend.emails.send({
+        from: config.EMAIL_FROM,
+        to,
+        subject: "Reset your password | DRIFT",
+        html: htmlContent,
+    });
+};

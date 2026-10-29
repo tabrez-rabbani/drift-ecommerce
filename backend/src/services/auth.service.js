@@ -13,7 +13,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 import AppError from "../utils/AppError.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
-import { sendVerificationEmail } from "./mail.service.js";
+import { sendVerificationEmail, sendPasswordResetEmail } from "./mail.service.js";
 
 export const registerUserService = async (userData) => {
     const { name, email, password, phone } = userData;
@@ -119,6 +119,74 @@ export const resendVerificationService = async (email) => {
     await sendVerificationEmail({ to: user.email, name: user.name, verificationUrl });
 
     return { message: "Verification link sent. Please check your inbox." };
+};
+
+export const forgotPasswordService = async (email) => {
+    if (!email) {
+        throw new AppError("Email is required", 400);
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await findUserByEmail(cleanEmail);
+
+    if (!user) {
+        throw new AppError("No account found with this email", 404);
+    }
+
+    if (user.googleId && !user.password) {
+        throw new AppError("This account uses Google sign-in. Password reset is not available.", 400);
+    }
+
+    const COOLDOWN_SECONDS = 60;
+    if (user.lastPasswordResetSentAt) {
+        const secondsElapsed = Math.floor((Date.now() - new Date(user.lastPasswordResetSentAt).getTime()) / 1000);
+        if (secondsElapsed < COOLDOWN_SECONDS) {
+            const remaining = COOLDOWN_SECONDS - secondsElapsed;
+            throw new AppError(`Please wait ${remaining}s before requesting another reset email.`, 429);
+        }
+    }
+
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+    user.lastPasswordResetSentAt = new Date();
+    await user.save();
+
+    const resetUrl = `${config.CLIENT_URL}/reset-password?token=${rawToken}`;
+    await sendPasswordResetEmail({ to: user.email, name: user.name, resetUrl });
+
+    return { message: "Password reset link sent. Please check your inbox." };
+};
+
+export const resetPasswordService = async (rawToken, newPassword) => {
+    if (!rawToken || !newPassword) {
+        throw new AppError("Token and new password are required", 400);
+    }
+
+    if (newPassword.length < 6) {
+        throw new AppError("Password must be at least 6 characters long", 400);
+    }
+
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
+
+    const user = await userModel.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        throw new AppError("Password reset link is invalid or has expired", 400);
+    }
+
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    user.refreshToken = "";
+    await user.save();
+
+    return { message: "Password reset successfully. You can now log in." };
 };
 
 export const loginService = async (userData) => {

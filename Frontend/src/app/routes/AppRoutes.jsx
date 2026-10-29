@@ -5,6 +5,8 @@ import HomePage from "../../features/home/pages/HomePage";
 
 const LoginPage        = lazy(() => import("../../features/auth/pages/LoginPage"));
 const RegisterPage     = lazy(() => import("../../features/auth/pages/RegisterPage"));
+const ForgotPasswordPage = lazy(() => import("../../features/auth/pages/ForgotPasswordPage"));
+const ResetPasswordPage  = lazy(() => import("../../features/auth/pages/ResetPasswordPage"));
 const CollectionPage   = lazy(() => import("../../features/products/pages/CollectionPage"));
 const ProductDetailPage = lazy(() => import("../../features/products/pages/ProductDetailPage"));
 const CartPage         = lazy(() => import("../../features/cart/pages/CartPage/CartPage"));
@@ -38,6 +40,8 @@ export default function AppRoutes() {
             <Route path="/info/:slug" element={<InfoPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/account/login" element={<RedirectPreserveSearch to="/login" />} />
             <Route path="/account/signup" element={<RedirectPreserveSearch to="/register" />} />
             <Route path="*" element={<NotFoundPage />} />

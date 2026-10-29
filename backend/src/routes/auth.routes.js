@@ -10,6 +10,8 @@ import {
     updateProfile,
     verifyEmailController,
     resendVerificationController,
+    forgotPasswordController,
+    resetPasswordController,
 } from "../controllers/auth.controller.js";
 import { loginValidator, registerValidator } from "../validators/authValidator.js";
 import { authenticateUser, optionalAuthenticateUser } from "../middlewares/authMiddleware.js";
@@ -28,6 +30,8 @@ authRouter.get("/get-me", optionalAuthenticateUser, getMe);
 authRouter.put("/profile", authenticateUser, updateProfile);
 authRouter.get("/logout", optionalAuthenticateUser, logOut);
 authRouter.get("/refresh-token", refreshTokenController);
+authRouter.post("/forgot-password", authLimiter, forgotPasswordController);
+authRouter.post("/reset-password", authLimiter, resetPasswordController);
 
 authRouter.get("/google", (req, res, next) => {
     const state = req.query.state || "user";

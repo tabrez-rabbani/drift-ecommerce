@@ -7,6 +7,8 @@ import {
     googleLoginService,
     verifyEmailService,
     resendVerificationService,
+    forgotPasswordService,
+    resetPasswordService,
 } from "../services/auth.service.js";
 import { updateRefreshToken } from "../dao/user.dao.js";
 import userModel from "../models/user.model.js";
@@ -201,5 +203,25 @@ export const refreshTokenController = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         message: "Access token refreshed successfully",
+    });
+});
+
+export const forgotPasswordController = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    const result = await forgotPasswordService(email);
+
+    res.status(200).json({
+        success: true,
+        message: result.message,
+    });
+});
+
+export const resetPasswordController = asyncHandler(async (req, res) => {
+    const { token, newPassword } = req.body;
+    const result = await resetPasswordService(token, newPassword);
+
+    res.status(200).json({
+        success: true,
+        message: result.message,
     });
 });

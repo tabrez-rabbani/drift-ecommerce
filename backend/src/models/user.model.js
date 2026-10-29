@@ -68,6 +68,17 @@ const userSchema = new mongoose.Schema({
     lastVerificationSentAt: {
         type: Date,
     },
+    resetPasswordToken: {
+        type: String,
+        sparse: true,
+        index: true,
+    },
+    resetPasswordExpire: {
+        type: Date,
+    },
+    lastPasswordResetSentAt: {
+        type: Date,
+    },
 }, { timestamps: true });
 
 userSchema.pre("save", async function () {

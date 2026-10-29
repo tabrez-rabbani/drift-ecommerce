@@ -128,10 +128,23 @@
 
 .formRow {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
   margin-top: 8px;
+}
+
+.forgotLink {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.forgotLink:hover {
+  color: var(--text);
 }
 
 .verificationAlert {

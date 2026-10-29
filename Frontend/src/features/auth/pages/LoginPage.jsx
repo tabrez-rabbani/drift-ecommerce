@@ -196,6 +196,9 @@ export default function LoginPage() {
               >
                 Sign In
               </Button>
+              <Link to="/forgot-password" className={styles.forgotLink}>
+                Forgot password?
+              </Link>
             </div>
 
             <div className={styles.resendPrompt}>
