@@ -9,6 +9,8 @@ import CategoriesPage from "@/pages/Categories/CategoriesPage";
 import ProductsPage from "@/pages/Products/ProductsPage";
 import CreateProductPage from "@/pages/Products/CreateProductPage";
 import EditProductPage from "@/pages/Products/EditProductPage";
+import UsersOrdersPage from "@/pages/Orders/UsersOrdersPage";
+import CancelledOrdersPage from "@/pages/Orders/CancelledOrdersPage";
 
 export default function App() {
   return (
@@ -25,6 +27,9 @@ export default function App() {
             <Route path="products" element={<ProductsPage />} />
             <Route path="products/create" element={<CreateProductPage />} />
             <Route path="products/edit/:id" element={<EditProductPage />} />
+            <Route path="orders" element={<Navigate to="/admin/orders/users-orders" replace />} />
+            <Route path="orders/users-orders" element={<UsersOrdersPage />} />
+            <Route path="orders/cancel-orders" element={<CancelledOrdersPage />} />
           </Route>
           <Route path="/" element={<Navigate to="/admin" replace />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />

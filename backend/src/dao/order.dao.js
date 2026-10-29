@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import orderModel from "../models/order.model.js";
 
 export async function createOrder(orderData) {
@@ -20,9 +21,20 @@ export async function getOrderById(orderId, userId) {
 
 export async function getAllOrders({ page = 1, limit = 20, status, search }) {
     const query = {};
-    if (status) query.orderStatus = status;
-    if (search) {
-        query["shippingAddress.fullName"] = { $regex: search, $options: "i" };
+    if (status && status !== "all") query.orderStatus = status;
+    if (search && search.trim()) {
+        const cleanSearch = search.trim();
+        const searchRegex = { $regex: cleanSearch, $options: "i" };
+        const orConditions = [
+            { "shippingAddress.fullName": searchRegex },
+            { "shippingAddress.email": searchRegex },
+            { "shippingAddress.phone": searchRegex },
+            { "shippingAddress.city": searchRegex },
+        ];
+        if (mongoose.Types.ObjectId.isValid(cleanSearch)) {
+            orConditions.push({ _id: new mongoose.Types.ObjectId(cleanSearch) });
+        }
+        query.$or = orConditions;
     }
 
     const skip = (page - 1) * limit;
