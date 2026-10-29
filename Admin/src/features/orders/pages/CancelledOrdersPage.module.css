@@ -1,0 +1,125 @@
+.filterRow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.statsPill {
+  background-color: #1d1e26;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #a0a5b1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statsCount {
+  color: #ea565f;
+  font-weight: 600;
+}
+
+.orderId {
+  font-family: monospace;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 14px;
+  margin: 0 0 4px 0;
+}
+
+.orderDate {
+  font-size: 12px;
+  color: #a0a5b1;
+  margin: 0;
+}
+
+.customerName {
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.customerContact {
+  font-size: 12px;
+  color: #a0a5b1;
+  margin: 0;
+}
+
+.itemsSummary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.itemThumbnails {
+  display: flex;
+  align-items: center;
+}
+
+.itemThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: #111111;
+  margin-right: -10px;
+  transition: transform 0.2s ease;
+}
+
+.itemThumb:hover {
+  transform: translateY(-2px) scale(1.1);
+  z-index: 5;
+}
+
+.itemCountBadge {
+  background-color: #1d1e26;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 12px;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 14px;
+  font-weight: 600;
+}
+
+.price {
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.paymentMode {
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #a0a5b1;
+  margin-bottom: 4px;
+}
+
+.iconBtnView {
+  background: transparent;
+  color: #0ebba0;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.iconBtnView:hover {
+  background-color: rgba(14, 187, 160, 0.1);
+  transform: scale(1.1);
+}
+
+@media (max-width: 640px) {
+  .filterRow {
+    justify-content: stretch;
+  }
+}

@@ -8,12 +8,6 @@
   justify-content: center;
   padding: 24px;
   z-index: 1000;
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .modal {
@@ -27,18 +21,6 @@
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-  animation: slideUp 0.2s ease-out;
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .header {
@@ -85,7 +67,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .closeBtn:hover {
@@ -101,7 +83,6 @@
   gap: 28px;
 }
 
-/* 2-column info grid */
 .grid2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -135,12 +116,39 @@
   color: #a0a5b1;
 }
 
-/* Items List */
+.uppercaseText {
+  text-transform: uppercase;
+}
+
+.capitalizeText {
+  text-transform: capitalize;
+}
+
+.paymentPaid {
+  color: #409852;
+  text-transform: capitalize;
+}
+
+.paymentUnpaid {
+  color: #ea565f;
+  text-transform: capitalize;
+}
+
+.statusHighlight {
+  color: #02a9f7;
+  text-transform: capitalize;
+}
+
 .sectionTitle {
   font-size: 16px;
   font-weight: 600;
   color: #ffffff;
   margin: 0 0 14px 0;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  width: 100%;
 }
 
 .itemsTable {
@@ -164,6 +172,15 @@
   color: #ffffff;
   font-size: 14px;
   vertical-align: middle;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.itemTotalCell {
+  text-align: right;
+  font-weight: 600;
 }
 
 .productCell {
@@ -193,13 +210,6 @@
   font-weight: 500;
 }
 
-.productVariant {
-  font-size: 12px;
-  color: #a0a5b1;
-  margin: 0;
-}
-
-/* Totals Summary */
 .totalsCard {
   background-color: #1d1e26;
   border-radius: 8px;
@@ -232,7 +242,6 @@
   color: #02a9f7;
 }
 
-/* Quick Status Updater */
 .statusUpdateCard {
   background-color: #1d1e26;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -294,7 +303,7 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .updateBtn:hover:not(:disabled) {

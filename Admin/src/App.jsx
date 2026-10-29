@@ -9,8 +9,8 @@ import CategoriesPage from "@/pages/Categories/CategoriesPage";
 import ProductsPage from "@/pages/Products/ProductsPage";
 import CreateProductPage from "@/pages/Products/CreateProductPage";
 import EditProductPage from "@/pages/Products/EditProductPage";
-import UsersOrdersPage from "@/pages/Orders/UsersOrdersPage";
-import CancelledOrdersPage from "@/pages/Orders/CancelledOrdersPage";
+import UsersOrdersPage from "@/features/orders/pages/UsersOrdersPage";
+import CancelledOrdersPage from "@/features/orders/pages/CancelledOrdersPage";
 
 export default function App() {
   return (

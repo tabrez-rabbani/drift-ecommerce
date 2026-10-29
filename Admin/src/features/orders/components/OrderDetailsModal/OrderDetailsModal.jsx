@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { X, CheckCircle2, Clock, Truck, Package, XCircle } from "lucide-react";
-import authApiInstance from "@/lib/axios";
+import { X } from "lucide-react";
 import { toast } from "sonner";
+import { updateOrderStatusApi } from "../../services/order.api";
 import styles from "./OrderDetailsModal.module.css";
 
 const FALLBACK_IMAGE =
@@ -37,18 +37,15 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
 
   const handleUpdateStatus = async () => {
     if (selectedStatus === order.orderStatus) {
-      toast.info("Status is already " + selectedStatus);
+      toast.info(`Status is already ${selectedStatus}`);
       return;
     }
 
     try {
       setIsUpdating(true);
-      const res = await authApiInstance.patch(`/admin/orders/${order._id}/status`, {
-        status: selectedStatus,
-      });
-
-      if (res.data?.success) {
-        toast.success(res.data.message || `Order status updated to "${selectedStatus}"`);
+      const res = await updateOrderStatusApi(order._id, selectedStatus);
+      if (res?.success) {
+        toast.success(res.message || `Order status updated to "${selectedStatus}"`);
         if (onStatusUpdated) {
           onStatusUpdated(order._id, selectedStatus);
         }
@@ -66,10 +63,9 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>
-            <div className={styles.titleLine}></div>
+            <div className={styles.titleLine} />
             <h3 className={styles.title}>Order Details</h3>
             <span className={styles.orderId}>#{order._id}</span>
           </div>
@@ -83,9 +79,7 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
           </button>
         </div>
 
-        {/* Body */}
         <div className={styles.body}>
-          {/* Quick Status Updater */}
           <div className={styles.statusUpdateCard}>
             <div className={styles.statusUpdateLeft}>
               <p className={styles.statusUpdateLabel}>Current Order Status</p>
@@ -117,9 +111,7 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
             </div>
           </div>
 
-          {/* Customer & Shipping 2-Col Grid */}
           <div className={styles.grid2}>
-            {/* Customer Info */}
             <div className={styles.infoCard}>
               <h4 className={styles.infoCardTitle}>Customer Information</h4>
               <p className={styles.infoLine}>
@@ -133,29 +125,34 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
               </p>
             </div>
 
-            {/* Shipping Address */}
             <div className={styles.infoCard}>
               <h4 className={styles.infoCardTitle}>Shipping Address</h4>
               <p className={styles.infoLine}>{shipping.streetAddress || "-"}</p>
               <p className={styles.infoLine}>
-                {shipping.city || "-"}, {shipping.state || "-"} {shipping.postalCode ? `- ${shipping.postalCode}` : ""}
+                {shipping.city || "-"}, {shipping.state || "-"}{" "}
+                {shipping.postalCode ? `- ${shipping.postalCode}` : ""}
               </p>
               <p className={styles.infoLineMuted}>{shipping.country || "India"}</p>
             </div>
           </div>
 
-          {/* Payment & Financial Info */}
           <div className={styles.infoCard}>
             <h4 className={styles.infoCardTitle}>Payment & Delivery Details</h4>
             <div className={styles.grid2}>
               <div>
                 <p className={styles.infoLine}>
                   <strong>Payment Method:</strong>{" "}
-                  <span style={{ textTransform: "uppercase" }}>{order.paymentMethod || "online"}</span>
+                  <span className={styles.uppercaseText}>{order.paymentMethod || "online"}</span>
                 </p>
                 <p className={styles.infoLine}>
                   <strong>Payment Status:</strong>{" "}
-                  <span style={{ textTransform: "capitalize", color: order.paymentStatus === "completed" ? "#409852" : "#ea565f" }}>
+                  <span
+                    className={
+                      order.paymentStatus === "completed"
+                        ? styles.paymentPaid
+                        : styles.paymentUnpaid
+                    }
+                  >
                     {order.paymentStatus || "pending"}
                   </span>
                 </p>
@@ -163,9 +160,7 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
               <div>
                 <p className={styles.infoLine}>
                   <strong>Order Status:</strong>{" "}
-                  <span style={{ textTransform: "capitalize", color: "#02a9f7" }}>
-                    {order.orderStatus}
-                  </span>
+                  <span className={styles.statusHighlight}>{order.orderStatus}</span>
                 </p>
                 <p className={styles.infoLine}>
                   <strong>Currency:</strong> {order.currency || "INR"}
@@ -174,12 +169,11 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
             </div>
           </div>
 
-          {/* Order Items Table */}
           <div>
             <h4 className={styles.sectionTitle}>
               Ordered Items ({order.items?.length || 0})
             </h4>
-            <div style={{ overflowX: "auto" }}>
+            <div className={styles.tableScroll}>
               <table className={styles.itemsTable}>
                 <thead>
                   <tr>
@@ -188,7 +182,7 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
                     <th>Size</th>
                     <th>Price</th>
                     <th>Qty</th>
-                    <th style={{ textAlign: "right" }}>Total</th>
+                    <th className={styles.alignRight}>Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -212,11 +206,11 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
                             </div>
                           </div>
                         </td>
-                        <td style={{ textTransform: "capitalize" }}>{item.color || "-"}</td>
-                        <td style={{ textTransform: "uppercase" }}>{item.size || "-"}</td>
+                        <td className={styles.capitalizeText}>{item.color || "-"}</td>
+                        <td className={styles.uppercaseText}>{item.size || "-"}</td>
                         <td>₹{itemPrice}</td>
                         <td>{item.quantity}</td>
-                        <td style={{ textAlign: "right", fontWeight: 600 }}>₹{itemTotal}</td>
+                        <td className={styles.itemTotalCell}>₹{itemTotal}</td>
                       </tr>
                     );
                   })}
@@ -225,7 +219,6 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
             </div>
           </div>
 
-          {/* Totals Summary */}
           <div className={styles.totalsCard}>
             <div className={styles.totalsRow}>
               <span>Subtotal:</span>
