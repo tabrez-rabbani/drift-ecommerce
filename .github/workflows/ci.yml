@@ -103,5 +103,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup environment for validation
+        run: cp backend/.env.example backend/.env
+
       - name: Validate docker-compose.yml
         run: docker compose config
+
