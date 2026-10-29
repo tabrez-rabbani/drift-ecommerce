@@ -38,7 +38,7 @@ export const findUserByGoogleId = async (googleId) => {
 };
 
 export const createGoogleUser = async (userData) => {
-    return await userModel.create(userData);
+    return await userModel.create({ ...userData, isVerified: true });
 };
 
 export const getAllUsers = async ({ page = 1, limit = 20, search }) => {

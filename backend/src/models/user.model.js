@@ -53,6 +53,18 @@ const userSchema = new mongoose.Schema({
     refreshToken: {
         type: String,
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+        sparse: true,
+        index: true,
+    },
+    verificationTokenExpire: {
+        type: Date,
+    },
 }, { timestamps: true });
 
 userSchema.pre("save", async function () {
