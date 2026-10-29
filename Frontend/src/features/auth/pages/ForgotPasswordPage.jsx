@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const cleanEmail = email.trim();
 
     if (!cleanEmail) {
@@ -61,44 +61,72 @@ export default function ForgotPasswordPage() {
     <main className={styles.main}>
       <div className={styles.container}>
         <p className={styles.brand}>DRIFT</p>
-        <h1 className={styles.title}>Forgot your password?</h1>
-        <p className={styles.subtitle}>
-          Enter your email and we&apos;ll send you a link to reset your password.
-        </p>
 
-        {sent && (
-          <div className={styles.successBanner}>
-            <p className={styles.successBannerText}>
-              Reset link sent to <strong>{email}</strong>. Check your inbox and spam folder.
+        {sent ? (
+          <div className={styles.sentView}>
+            <h1 className={styles.title}>Check your email</h1>
+            <p className={styles.subtitle}>
+              We sent a password reset link to <strong>{email}</strong>. Please check your inbox and spam folder.
             </p>
+
+            <Link to="/login" className={styles.backButtonLink}>
+              <Button fullWidth>Return to sign in</Button>
+            </Link>
+
+            <div className={styles.resendArea}>
+              <span className={styles.resendNote}>Didn&apos;t get the email?</span>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading || cooldown > 0}
+                className={styles.resendBtn}
+              >
+                {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend link"}
+              </button>
+              <span className={styles.dot}>•</span>
+              <button
+                type="button"
+                onClick={() => setSent(false)}
+                className={styles.changeEmailBtn}
+              >
+                Change email
+              </button>
+            </div>
           </div>
+        ) : (
+          <>
+            <h1 className={styles.title}>Forgot your password?</h1>
+            <p className={styles.subtitle}>
+              Enter your email and we&apos;ll send you a link to reset your password.
+            </p>
+
+            <form className={styles.form} onSubmit={handleSubmit} noValidate>
+              <div className={styles.field}>
+                <input
+                  type="email"
+                  id="forgot-email"
+                  placeholder=" "
+                  required
+                  autoComplete="email"
+                  autoFocus
+                  className={styles.input}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
+                />
+                <label htmlFor="forgot-email" className={styles.label}>Email address</label>
+              </div>
+
+              <Button type="submit" fullWidth loading={loading} disabled={cooldown > 0}>
+                {cooldown > 0 ? `Resend in ${cooldown}s` : "Send reset link"}
+              </Button>
+            </form>
+
+            <p className={styles.backLink}>
+              <Link to="/login" className={styles.link}>← Back to sign in</Link>
+            </p>
+          </>
         )}
-
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          <div className={styles.field}>
-            <input
-              type="email"
-              id="forgot-email"
-              placeholder=" "
-              required
-              autoComplete="email"
-              autoFocus
-              className={styles.input}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-            />
-            <label htmlFor="forgot-email" className={styles.label}>Email address</label>
-          </div>
-
-          <Button type="submit" fullWidth loading={loading} disabled={cooldown > 0}>
-            {cooldown > 0 ? `Resend in ${cooldown}s` : sent ? "Resend reset link" : "Send reset link"}
-          </Button>
-        </form>
-
-        <p className={styles.backLink}>
-          <Link to="/login" className={styles.link}>← Back to sign in</Link>
-        </p>
       </div>
     </main>
   );
