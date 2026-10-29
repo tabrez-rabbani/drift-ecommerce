@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { Save, CloudUpload, X, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Save, CloudUpload, X } from "lucide-react";
 import styles from "./CreateProduct.module.css";
-import authApiInstance from "@/lib/axios";
+import { fetchCategoriesApi, createProductApi } from "../services/product.api";
 import { FILTER_COLORS } from "@/constants/collectionFilters";
 import { SUBCATEGORIES_BY_CATEGORY } from "@/constants/subcategories";
 import { toast } from "sonner";
@@ -23,10 +23,8 @@ function ImageFilePreview({ file, alt, className }) {
   return <img src={previewUrl} alt={alt} className={className} />;
 }
 
-export default function EditProductPage() {
-  const { id } = useParams();
+export default function CreateProductPage() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -46,18 +44,16 @@ export default function EditProductPage() {
   const [showCustomColor, setShowCustomColor] = useState(false);
   const [customColorName, setCustomColorName] = useState("");
   const [customColorHex, setCustomColorHex] = useState("#ffffff");
-  const [existingImages, setExistingImages] = useState({});
-  const [newColorImages, setNewColorImages] = useState({});
+  const [colorImages, setColorImages] = useState({});
   const [categoriesList, setCategoriesList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await authApiInstance.get("/categories");
-        if (response.data.success) {
-          setCategoriesList(response.data.categories);
+        const data = await fetchCategoriesApi();
+        if (data.success) {
+          setCategoriesList(data.categories);
         }
       } catch (error) {
         console.error("Failed to fetch categories", error);
@@ -66,51 +62,6 @@ export default function EditProductPage() {
 
     fetchCategories();
   }, []);
-
-  useEffect(() => {
-    const fetchProductDetails = async () => {
-      if (!id) return;
-      try {
-        setIsLoading(true);
-        const response = await authApiInstance.get(`/products/admin/${id}`);
-        if (response.data.success) {
-          const product = response.data.product;
-          
-          setFormData({
-            title: product.title || "",
-            description: product.description || "",
-            priceAmount: product.price?.amount?.toString() || "",
-            originalPriceAmount: product.originalPrice?.amount?.toString() || "",
-            category: product.category || "",
-            subcategory: product.subcategory || "",
-            material: product.material || "",
-            deliveryInfo: product.deliveryInfo || "",
-            inStock: product.inStock ? "true" : "false",
-            isNewIn: product.isNewIn ? "true" : "false"
-          });
-
-          setSizes(product.sizes || []);
-          
-          const loadedColors = [];
-          const loadedExistingImages = {};
-          
-          product.colors?.forEach((c) => {
-            loadedColors.push({ name: c.name, hex: c.hex });
-            loadedExistingImages[c.name] = c.images || [];
-          });
-          
-          setColors(loadedColors);
-          setExistingImages(loadedExistingImages);
-        }
-      } catch (error) {
-        console.error("Failed to fetch product details", error);
-        toast.error("Failed to load product details");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchProductDetails();
-  }, [id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -138,17 +89,12 @@ export default function EditProductPage() {
     const exists = colors.find(c => c.name === colorObj.name);
     if (exists) {
       setColors(colors.filter(c => c.name !== colorObj.name));
-      const newExisting = { ...existingImages };
-      delete newExisting[colorObj.name];
-      setExistingImages(newExisting);
-      
-      const newFiles = { ...newColorImages };
-      delete newFiles[colorObj.name];
-      setNewColorImages(newFiles);
+      const newImages = { ...colorImages };
+      delete newImages[colorObj.name];
+      setColorImages(newImages);
     } else {
       setColors([...colors, colorObj]);
-      setExistingImages({ ...existingImages, [colorObj.name]: [] });
-      setNewColorImages({ ...newColorImages, [colorObj.name]: [] });
+      setColorImages({ ...colorImages, [colorObj.name]: [] });
     }
   };
 
@@ -157,8 +103,7 @@ export default function EditProductPage() {
       const newColor = { name: customColorName.trim(), hex: customColorHex };
       if (!colors.find(c => c.name.toLowerCase() === newColor.name.toLowerCase())) {
         setColors([...colors, newColor]);
-        setExistingImages({ ...existingImages, [newColor.name]: [] });
-        setNewColorImages({ ...newColorImages, [newColor.name]: [] });
+        setColorImages({ ...colorImages, [newColor.name]: [] });
       }
       setCustomColorName("");
       setCustomColorHex("#ffffff");
@@ -169,45 +114,30 @@ export default function EditProductPage() {
   const removeColor = (idxToRemove) => {
     const colorToRemove = colors[idxToRemove];
     setColors(colors.filter((_, idx) => idx !== idxToRemove));
-    
-    const newExisting = { ...existingImages };
-    delete newExisting[colorToRemove.name];
-    setExistingImages(newExisting);
-    
-    const newFiles = { ...newColorImages };
-    delete newFiles[colorToRemove.name];
-    setNewColorImages(newFiles);
+    const newImages = { ...colorImages };
+    delete newImages[colorToRemove.name];
+    setColorImages(newImages);
   };
 
   const handleColorImageUpload = (e, colorName) => {
     if (e.target.files) {
       const selectedFiles = Array.from(e.target.files);
-      const existingCount = existingImages[colorName]?.length || 0;
-      const currentNewImages = newColorImages[colorName] || [];
-      
-      if (existingCount + currentNewImages.length + selectedFiles.length > 7) {
-        toast.warning("You can only have up to 7 images per color");
+      const currentImages = colorImages[colorName] || [];
+      if (currentImages.length + selectedFiles.length > 7) {
+        toast.warning("You can only upload up to 7 images per color");
         return;
       }
-      setNewColorImages({
-        ...newColorImages,
-        [colorName]: [...currentNewImages, ...selectedFiles]
+      setColorImages({
+        ...colorImages,
+        [colorName]: [...currentImages, ...selectedFiles]
       });
     }
   };
 
-  const removeExistingImage = (colorName, idxToRemove) => {
-    const currentImages = existingImages[colorName] || [];
-    setExistingImages({
-      ...existingImages,
-      [colorName]: currentImages.filter((_, idx) => idx !== idxToRemove)
-    });
-  };
-
-  const removeNewImage = (colorName, idxToRemove) => {
-    const currentImages = newColorImages[colorName] || [];
-    setNewColorImages({
-      ...newColorImages,
+  const removeColorImage = (colorName, idxToRemove) => {
+    const currentImages = colorImages[colorName] || [];
+    setColorImages({
+      ...colorImages,
       [colorName]: currentImages.filter((_, idx) => idx !== idxToRemove)
     });
   };
@@ -220,14 +150,9 @@ export default function EditProductPage() {
       return;
     }
     
-    const missingImages = colors.find(c => {
-      const ex = existingImages[c.name] || [];
-      const nw = newColorImages[c.name] || [];
-      return ex.length === 0 && nw.length === 0;
-    });
-    
+    const missingImages = colors.find(c => !colorImages[c.name] || colorImages[c.name].length === 0);
     if (missingImages) {
-      toast.warning(`Please have at least one image for color: ${missingImages.name}`);
+      toast.warning(`Please upload at least one image for color: ${missingImages.name}`);
       return;
     }
 
@@ -240,60 +165,42 @@ export default function EditProductPage() {
       });
       
       data.append("sizes", JSON.stringify(sizes));
-      
-      const finalColorsPayload = colors.map((c) => {
-        return {
-          name: c.name,
-          hex: c.hex,
-          images: existingImages[c.name] || []
-        };
-      });
-      
-      data.append("colors", JSON.stringify(finalColorsPayload));
+      data.append("colors", JSON.stringify(colors));
       
       colors.forEach((color, idx) => {
-        const newImagesForColor = newColorImages[color.name] || [];
-        newImagesForColor.forEach(img => {
+        const imagesForColor = colorImages[color.name] || [];
+        imagesForColor.forEach(img => {
           data.append(`images_${idx}`, img);
         });
       });
 
-      const response = await authApiInstance.put(`/products/${id}`, data, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+      const res = await createProductApi(data);
 
-      if (response.data.success) {
-        toast.success("Product updated successfully!");
+      if (res.success) {
+        toast.success("Product created successfully!");
         setTimeout(() => {
           navigate("/admin/products");
         }, 800);
       }
     } catch (error) {
-      console.error("Error updating product:", error);
-      toast.error(error.response?.data?.message || "Failed to update product.");
+      console.error("Error creating product:", error);
+      toast.error(error.response?.data?.message || "Failed to create product.");
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  if (isLoading) {
-    return <div className={styles.loadingBox}>Loading product details...</div>;
-  }
 
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
       <div className={styles.card}>
         <div className={styles.cardHeader}>
           <div className={styles.titleWrapper}>
-            <Link to="/admin/products" className={styles.backLink}>
-              <ArrowLeft size={24} />
-            </Link>
             <div className={styles.titleLine}></div>
-            <h2 className={styles.title}>Edit Product</h2>
+            <h2 className={styles.title}>Product Information</h2>
           </div>
           <button type="submit" className={styles.saveBtn} disabled={isSubmitting}>
             <Save size={18} />
-            <span>{isSubmitting ? "Updating..." : "Update Product"}</span>
+            <span>{isSubmitting ? "Saving..." : "Save Data"}</span>
           </button>
         </div>
 
@@ -562,10 +469,7 @@ export default function EditProductPage() {
         ) : (
           <div className={styles.colorUploadsContainer}>
             {colors.map((color) => {
-              const currentExisting = existingImages[color.name] || [];
-              const currentNew = newColorImages[color.name] || [];
-              const totalImagesCount = currentExisting.length + currentNew.length;
-
+              const currentImages = colorImages[color.name] || [];
               return (
                 <div key={color.name} className={styles.colorUploadGroup}>
                   <div className={styles.colorUploadHeader}>
@@ -586,7 +490,7 @@ export default function EditProductPage() {
                       multiple 
                       accept="image/*"
                       onChange={(e) => handleColorImageUpload(e, color.name)}
-                      disabled={totalImagesCount >= 7}
+                      disabled={currentImages.length >= 7}
                     />
                     <label htmlFor={`imageUpload-${color.name}`} className={styles.uploadLabel}>
                       <CloudUpload size={32} className={styles.uploadIcon} />
@@ -594,23 +498,14 @@ export default function EditProductPage() {
                     </label>
                   </div>
 
-                  {totalImagesCount > 0 && (
+                  {currentImages.length > 0 && (
                     <div className={styles.imagePreviewGrid}>
-                      {currentExisting.map((url, idx) => (
-                        <div key={`existing-${idx}`} className={styles.imagePreviewWrapper}>
-                          <img src={url} alt={`Existing ${idx}`} className={styles.imagePreview} />
-                          <button type="button" className={styles.removeImageBtn} onClick={() => removeExistingImage(color.name, idx)}>
+                      {currentImages.map((img, idx) => (
+                        <div key={idx} className={styles.imagePreviewWrapper}>
+                          <ImageFilePreview file={img} alt={`Preview ${idx}`} className={styles.imagePreview} />
+                          <button type="button" className={styles.removeImageBtn} onClick={() => removeColorImage(color.name, idx)}>
                             <X size={16} />
                           </button>
-                        </div>
-                      ))}
-                      {currentNew.map((file, idx) => (
-                        <div key={`new-${idx}`} className={styles.imagePreviewWrapper}>
-                          <ImageFilePreview file={file} alt={`New ${idx}`} className={styles.imagePreview} />
-                          <button type="button" className={styles.removeImageBtn} onClick={() => removeNewImage(color.name, idx)}>
-                            <X size={16} />
-                          </button>
-                          <span className={styles.newBadge}>New</span>
                         </div>
                       ))}
                     </div>

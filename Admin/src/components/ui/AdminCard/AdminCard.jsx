@@ -20,3 +20,4 @@ export default function AdminCard({ title, actions, children, className = "" }) 
     </div>
   );
 }
+

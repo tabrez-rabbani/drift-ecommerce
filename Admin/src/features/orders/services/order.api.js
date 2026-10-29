@@ -14,3 +14,4 @@ export async function updateOrderStatusApi(orderId, status) {
   const response = await authApiInstance.patch(`/admin/orders/${orderId}/status`, { status });
   return response.data;
 }
+

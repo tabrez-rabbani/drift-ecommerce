@@ -34,3 +34,4 @@ export default function StatusBadge({ status = "", variant, label, className = "
     </span>
   );
 }
+

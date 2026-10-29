@@ -6,9 +6,9 @@ import AdminLayout from "@/components/AdminLayout/AdminLayout";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import HeroPage from "@/pages/Hero/HeroPage";
 import CategoriesPage from "@/pages/Categories/CategoriesPage";
-import ProductsPage from "@/pages/Products/ProductsPage";
-import CreateProductPage from "@/pages/Products/CreateProductPage";
-import EditProductPage from "@/pages/Products/EditProductPage";
+import ProductsPage from "@/features/products/pages/ProductsPage";
+import CreateProductPage from "@/features/products/pages/CreateProductPage";
+import EditProductPage from "@/features/products/pages/EditProductPage";
 import UsersOrdersPage from "@/features/orders/pages/UsersOrdersPage";
 import CancelledOrdersPage from "@/features/orders/pages/CancelledOrdersPage";
 

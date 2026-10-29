@@ -66,3 +66,4 @@ export default function Pagination({ page = 1, totalPages = 1, total = 0, onPage
     </div>
   );
 }
+
