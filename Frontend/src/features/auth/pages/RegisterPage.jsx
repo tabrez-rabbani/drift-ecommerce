@@ -71,7 +71,7 @@ export default function RegisterPage() {
     });
 
     if (success) {
-      navigate("/login?registered=true", { replace: true });
+      navigate("/login", { replace: true });
     }
   };
 
