@@ -1,0 +1,78 @@
+.heroWrapper {
+  width: 100%;
+  height: calc(100vh - var(--header-height, 86px));
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper :global(.swiper-wrapper) {
+  transition-timing-function: cubic-bezier(0, 0, 0.15, 1) !important;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slideClickable {
+  cursor: pointer;
+}
+
+.slide picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.slideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .heroWrapper {
+    height: calc(100svh - var(--header-height, 86px));
+  }
+
+  .slideImage {
+    object-position: center top;
+  }
+}
+
+@media (max-width: 767px) {
+  .heroWrapper {
+    height: calc(100svh - var(--header-height, 58px));
+    min-height: 480px;
+    max-height: 820px;
+  }
+}
+
+@media (max-width: 390px) {
+  .heroWrapper {
+    min-height: 420px;
+  }
+}
+
+.heroSkeleton {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #0d0d0d 0%, #181818 50%, #0d0d0d 100%);
+  background-size: 200% 100%;
+  animation: heroShimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes heroShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

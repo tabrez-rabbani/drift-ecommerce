@@ -1,0 +1,115 @@
+.searchHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 720px;
+  margin: 0 auto 36px auto;
+  text-align: center;
+}
+
+.searchEyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #888888;
+  margin-bottom: 8px;
+}
+
+.searchHeading {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #000000;
+  margin: 0 0 22px 0;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 18px;
+  color: #222222;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.searchInput {
+  width: 100%;
+  height: 52px;
+  padding: 0 46px 0 52px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #000000;
+  background: #ffffff;
+  border: 1.5px solid #111111;
+  border-radius: 0px; /* Crisp rectangle, eliminates AI pill look */
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  background: #ffffff;
+  border-color: #000000;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+}
+
+.searchInput::placeholder {
+  color: #888888;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.clearBtn {
+  position: absolute;
+  right: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 0px;
+  border: none;
+  background: #f0f0f0;
+  color: #222222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.clearBtn:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .searchHero {
+    margin-bottom: 24px;
+  }
+  .searchHeading {
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+  .searchInput {
+    height: 48px;
+    font-size: 16px; /* Prevents unwanted iOS Safari auto-zoom on input focus */
+    padding: 0 40px 0 46px;
+  }
+  .searchInput::placeholder {
+    font-size: 12.5px;
+  }
+  .searchIcon {
+    left: 14px;
+  }
+  .clearBtn {
+    right: 12px;
+    width: 24px;
+    height: 24px;
+  }
+}

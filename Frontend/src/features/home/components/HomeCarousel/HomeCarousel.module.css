@@ -1,0 +1,48 @@
+.carousel {
+  width: 100%;
+  background-color: var(--bg);
+  padding: 0 16px 40px;
+}
+
+.swiper {
+  width: 100%;
+  max-width: 1720px;
+  margin: 0 auto;
+}
+
+.slide {
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+}
+
+.slideLink {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+}
+
+.slideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.slideLink:hover .slideImage {
+  transform: scale(1.03);
+}
+
+@media (max-width: 1024px) {
+  .carousel {
+    padding: 0 10px 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .carousel {
+    padding: 0 8px 24px;
+  }
+}

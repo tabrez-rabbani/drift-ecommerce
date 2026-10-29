@@ -1,0 +1,309 @@
+@keyframes accountShimmer {
+  0% {
+    background-position: -800px 0;
+  }
+  100% {
+    background-position: 800px 0;
+  }
+}
+
+.skeletonLine,
+.skeletonCover,
+.skeletonAvatar,
+.skeletonIconBox {
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 0%,
+    #e2e8f0 50%,
+    #f1f5f9 100%
+  );
+  background-size: 1600px 100%;
+  animation: accountShimmer 1.8s ease-in-out infinite;
+}
+
+.wrapper {
+  min-height: 85vh;
+  background-color: #f4f6f8;
+  padding: 40px 0 80px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.sidebar {
+  width: 400px;
+  min-width: 380px;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.skeletonCover {
+  width: 100%;
+  height: 140px;
+}
+
+.sidebarProfile {
+  position: relative;
+  text-align: center;
+  padding: 0 20px 20px 20px;
+}
+
+.skeletonAvatar {
+  width: 90px;
+  height: 90px;
+  margin: -45px auto 12px auto;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.skeletonLine {
+  border-radius: 6px;
+}
+
+.skeletonIconBox {
+  border-radius: 10px;
+}
+
+.skeletonName {
+  width: 130px;
+  height: 20px;
+  margin: 10px auto 6px;
+}
+
+.skeletonEmail {
+  width: 170px;
+  height: 14px;
+  margin: 0 auto;
+}
+
+.skeletonNavGroup {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeletonNavItem {
+  width: 100%;
+  height: 46px;
+  border-radius: 8px;
+}
+
+.sidebarLogoutArea {
+  padding: 16px 20px 24px 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.skeletonLogout {
+  width: 100%;
+  height: 44px;
+  border-radius: 8px;
+}
+
+.content {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  min-height: 520px;
+}
+
+.skeletonPageTitle {
+  width: 180px;
+  height: 28px;
+  margin-bottom: 20px;
+}
+
+.skeletonGreetingWrap {
+  margin-bottom: 28px;
+}
+
+.skeletonGreetingTitle {
+  width: 160px;
+  height: 20px;
+  margin-bottom: 10px;
+}
+
+.skeletonGreetingText {
+  width: 100%;
+  height: 14px;
+  margin-bottom: 8px;
+}
+
+.skeletonGreetingSubtext {
+  width: 70%;
+  height: 14px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.statBox {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid #eef2f6;
+  background: #f8fafc;
+}
+
+.skeletonStatIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.skeletonStatInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skeletonStatLabel {
+  width: 80px;
+  height: 14px;
+}
+
+.skeletonStatValue {
+  width: 40px;
+  height: 24px;
+}
+
+.dashInfoCard {
+  background: #ffffff;
+  border: 1px solid #eef2f6;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.dashInfoCardMt {
+  margin-bottom: 0;
+}
+
+.skeletonCardTitle {
+  width: 160px;
+  height: 20px;
+  margin-bottom: 18px;
+}
+
+.skeletonCardTitleSm {
+  width: 140px;
+  height: 20px;
+  margin-bottom: 18px;
+}
+
+.skeletonCardList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.skeletonLine60 {
+  width: 60%;
+  height: 16px;
+}
+
+.skeletonLine50 {
+  width: 50%;
+  height: 16px;
+}
+
+.skeletonLine75 {
+  width: 75%;
+  height: 16px;
+}
+
+.skeletonLine65 {
+  width: 65%;
+  height: 16px;
+}
+
+.skeletonLine45 {
+  width: 45%;
+  height: 16px;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 320px;
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 30px 0 60px 0;
+  }
+
+  .layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .content {
+    width: 100%;
+    padding: 24px;
+    min-height: auto;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding: 20px 0 45px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .skeletonCover {
+    height: 110px;
+  }
+
+  .skeletonAvatar {
+    width: 76px;
+    height: 76px;
+    margin: -38px auto 10px auto;
+  }
+
+  .content {
+    padding: 18px 14px;
+    border-radius: 10px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+}

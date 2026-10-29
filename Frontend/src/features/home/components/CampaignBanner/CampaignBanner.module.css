@@ -1,0 +1,24 @@
+.section {
+  width: 100%;
+  display: block;
+  background-color: #d6d6d4;
+}
+
+.bannerLink {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.picture {
+  display: block;
+  width: 100%;
+}
+
+.bannerImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}

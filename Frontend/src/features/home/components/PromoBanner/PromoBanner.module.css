@@ -1,0 +1,23 @@
+.banner {
+  width: 100%;
+  background-color: var(--bg);
+  padding: 0 0 32px 0;
+}
+
+.banner__link {
+  display: block;
+  width: 100%;
+  line-height: 0;
+}
+
+.banner__image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .banner {
+    padding-bottom: 20px;
+  }
+}

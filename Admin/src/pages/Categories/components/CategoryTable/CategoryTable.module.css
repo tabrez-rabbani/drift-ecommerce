@@ -1,0 +1,241 @@
+.card {
+  background-color: #14171d;
+  border: 1px solid #1c222c;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.tableHeader {
+  margin-bottom: 20px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 14px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a0a5b1;
+  border-bottom: 1px solid #1f2530;
+}
+
+.thThumbnail {
+  width: 100px;
+}
+
+.thOrder {
+  width: 90px;
+}
+
+.thActions {
+  width: 100px;
+  text-align: right;
+}
+
+.tr {
+  border-bottom: 1px solid #181d26;
+  transition: background-color 0.2s ease;
+}
+
+.tr:hover {
+  background-color: #181c24;
+}
+
+.table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+}
+
+.thumbWrapper {
+  position: relative;
+  width: 58px;
+  height: 64px;
+  border-radius: 8px;
+  background-color: #0d0f12;
+  border: 1px solid #232a36;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.thumbPlaceholder {
+  color: #616876;
+}
+
+.quickUploadBtn {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.thumbWrapper:hover .quickUploadBtn {
+  opacity: 1;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.categoryName {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+}
+
+.slugLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #02a9f7;
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.slugLink:hover {
+  text-decoration: underline;
+}
+
+.orderBadge {
+  display: inline-block;
+  background-color: #1c222c;
+  color: #a0a5b1;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.actionBtn {
+  background: transparent;
+  border: none;
+  color: #a0a5b1;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  background-color: #1e2430;
+  color: #02a9f7;
+}
+
+.deleteBtn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: #a0a5b1;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 0;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: #4a5160;
+  margin-bottom: 8px;
+}
+
+.emptyTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.emptyText {
+  font-size: 13.5px;
+  color: #798292;
+  margin: 0 0 16px 0;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #02a9f7;
+  color: #ffffff;
+  border: 1px solid transparent;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primaryBtn:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,38 @@
+services:
+  backend:
+    build: ./backend
+    container_name: drift-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+    networks:
+      - drift-network
+
+
+  frontend:
+    build: ./Frontend
+    container_name: drift-frontend
+    ports:
+      - "5173:80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - drift-network
+
+  admin:
+    build: ./Admin
+    container_name: drift-admin
+    ports:
+      - "5175:80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - drift-network
+
+networks:
+  drift-network:
+    driver: bridge

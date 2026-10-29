@@ -1,0 +1,101 @@
+@keyframes shimmer {
+  0% {
+    background-position: -700px 0;
+  }
+  100% {
+    background-position: 700px 0;
+  }
+}
+
+.cardSkeleton__image,
+.cardSkeleton__title,
+.cardSkeleton__price,
+.cardSkeleton__btn,
+.cardSkeleton__swatch {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 0%,
+    #e8e8e8 20%,
+    #f5f5f5 40%,
+    #f0f0f0 100%
+  );
+  background-size: 1400px 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.cardSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.cardSkeleton__image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 8px;
+}
+
+.cardSkeleton__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-inline: 4px;
+}
+
+.cardSkeleton__title {
+  width: 65%;
+  height: 14px;
+}
+
+.cardSkeleton__priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+.cardSkeleton__price {
+  width: 35%;
+  height: 16px;
+}
+
+.cardSkeleton__btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.cardSkeleton__swatches {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.cardSkeleton__swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 1px;
+}
+
+@media (max-width: 767px) {
+  .cardSkeleton {
+    gap: 6px;
+  }
+
+  .cardSkeleton__image {
+    border-radius: 0;
+  }
+
+  .cardSkeleton__content {
+    gap: 4px;
+    padding-inline: 2px;
+  }
+
+  .cardSkeleton__swatch {
+    width: 9.5px;
+    height: 9.5px;
+    border-radius: 1px;
+  }
+}

@@ -1,0 +1,115 @@
+.notFound {
+  min-height: calc(100vh - 280px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  background-color: var(--bg, #fbfbf9);
+  text-align: center;
+}
+
+.container {
+  max-width: 580px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.code {
+  font-family: var(--font-heading, serif);
+  font-size: clamp(72px, 12vw, 128px);
+  font-weight: 700;
+  color: var(--text, #111827);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.title {
+  font-family: var(--font-heading, serif);
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 600;
+  color: var(--text, #111827);
+  margin: 16px 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.description {
+  font-family: var(--font-body, sans-serif);
+  font-size: 15px;
+  color: var(--muted, #6b7280);
+  line-height: 1.6;
+  margin: 0 0 32px;
+  max-width: 440px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 28px;
+  background-color: var(--text, #111827);
+  color: #ffffff;
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.primaryBtn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 26px;
+  background-color: transparent;
+  color: var(--text, #111827);
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.secondaryBtn:hover {
+  border-color: var(--text, #111827);
+  background-color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .notFound {
+    padding: 48px 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .primaryBtn,
+  .secondaryBtn {
+    width: 100%;
+  }
+}
