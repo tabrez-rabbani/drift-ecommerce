@@ -33,3 +33,4 @@ export async function fetchCategoriesApi() {
   const response = await authApiInstance.get("/categories");
   return response.data;
 }
+

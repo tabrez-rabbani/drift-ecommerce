@@ -98,3 +98,4 @@ export function useProducts({ limit = 100 } = {}) {
     refreshProducts: loadProducts,
   };
 }
+
