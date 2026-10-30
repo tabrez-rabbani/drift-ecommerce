@@ -6,6 +6,7 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
   const [orders, setOrders] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [statusFilter, setStatusFilter] = useState(initialStatus);
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,7 +34,7 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
   const loadOrders = useCallback(async () => {
     try {
       setLoading(true);
-      const params = { page, limit: 15 };
+      const params = { page, limit: pageSize };
 
       if (isCancelledOnly) {
         params.status = "cancelled";
@@ -50,7 +51,7 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
       if (isMountedRef.current && data?.success) {
         setOrders(data.orders || []);
         setTotal(data.total || 0);
-        setTotalPages(data.totalPages || 1);
+        setTotalPages(Math.max(1, data.totalPages || 1));
       }
     } catch (err) {
       if (isMountedRef.current) {
@@ -61,11 +62,22 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
         setLoading(false);
       }
     }
-  }, [page, statusFilter, debouncedSearch, isCancelledOnly]);
+  }, [page, pageSize, statusFilter, debouncedSearch, isCancelledOnly]);
 
   useEffect(() => {
     loadOrders();
   }, [loadOrders]);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
+  const handlePageSizeChange = (newSize) => {
+    setPageSize(newSize);
+    setPage(1);
+  };
 
   const updateStatus = async (orderId, newStatus) => {
     try {
@@ -95,6 +107,8 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
     total,
     page,
     setPage,
+    pageSize,
+    setPageSize: handlePageSizeChange,
     totalPages,
     statusFilter,
     setStatusFilter,

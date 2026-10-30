@@ -1,8 +1,45 @@
-.filterRow {
+.container {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.card {
+  background-color: #272a33;
+  border-radius: 8px;
+  padding: 32px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titleLine {
+  width: 4px;
+  height: 24px;
+  background-color: #02a9f7;
+  border-radius: 2px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
 }
 
 .statsPill {
@@ -22,16 +59,88 @@
   font-weight: 600;
 }
 
+.filterRow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.searchLabel {
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.searchInput {
+  background-color: #1d1e26;
+  border: 1px solid #999999;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: #ffffff;
+  font-size: 16px;
+  outline-color: var(--main-color, #02a9f7);
+  width: 350px;
+  transition: border-color 0.2s, outline-color 0.2s;
+}
+
+.searchInput:focus {
+  border-color: var(--main-color, #02a9f7);
+  outline-color: var(--main-color, #02a9f7);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 16px 20px;
+  background-color: #63c0ad65;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 20px;
+  border: none;
+  white-space: nowrap;
+}
+
+.table th:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.table th:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.table td {
+  padding: 20px;
+  color: #ffffff;
+  font-size: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+
+.table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
 .orderId {
   font-family: monospace;
   font-weight: 600;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 16px;
   margin: 0 0 4px 0;
 }
 
 .orderDate {
-  font-size: 12px;
+  font-size: 13px;
   color: #a0a5b1;
   margin: 0;
 }
@@ -40,11 +149,11 @@
   font-weight: 500;
   color: #ffffff;
   margin: 0 0 4px 0;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .customerContact {
-  font-size: 12px;
+  font-size: 13px;
   color: #a0a5b1;
   margin: 0;
 }
@@ -61,13 +170,13 @@
 }
 
 .itemThumb {
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border-radius: 6px;
   object-fit: cover;
   border: 1px solid rgba(255, 255, 255, 0.15);
   background-color: #111111;
-  margin-right: -10px;
+  margin-right: -12px;
   transition: transform 0.2s ease;
 }
 
@@ -81,23 +190,44 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   font-size: 12px;
   color: #ffffff;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 10px;
-  margin-left: 14px;
+  margin-left: 16px;
   font-weight: 600;
 }
 
 .price {
   font-weight: 600;
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
 }
 
 .paymentMode {
-  text-transform: uppercase;
   font-size: 12px;
+  text-transform: uppercase;
   color: #a0a5b1;
   margin-bottom: 4px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.badgeCancelled {
+  background-color: #42222a;
+  color: #ea565f;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
 }
 
 .iconBtnView {
@@ -108,19 +238,32 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px;
-  border-radius: 6px;
-  transition: all 0.15s ease;
+  transition: opacity 0.2s;
+  padding: 0;
 }
 
 .iconBtnView:hover {
-  background-color: rgba(14, 187, 160, 0.1);
-  transform: scale(1.1);
+  opacity: 0.7;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px;
+  color: #a0a5b1;
+  font-size: 16px;
 }
 
 @media (max-width: 640px) {
+  .card {
+    padding: 20px;
+  }
+
   .filterRow {
-    justify-content: stretch;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchInput {
+    width: 100%;
   }
 }
-
