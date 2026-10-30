@@ -4,7 +4,7 @@ import { Toaster } from "sonner";
 import AdminLoginPage from "@/pages/AdminLogin/AdminLoginPage";
 import AdminLayout from "@/components/AdminLayout/AdminLayout";
 import Dashboard from "@/pages/Dashboard/Dashboard";
-import HeroPage from "@/pages/Hero/HeroPage";
+import HeroPage from "@/features/hero/pages/HeroPage";
 import CategoriesPage from "@/features/categories/pages/CategoriesPage";
 import ProductsPage from "@/features/products/pages/ProductsPage";
 import CreateProductPage from "@/features/products/pages/CreateProductPage";
