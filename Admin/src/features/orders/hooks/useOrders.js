@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
-import { fetchOrdersApi, updateOrderStatusApi } from "../services/order.api";
+import { fetchOrdersApi, fetchCancelledOrdersApi, updateOrderStatusApi } from "../services/order.api";
 
 export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {}) {
   const [orders, setOrders] = useState([]);
@@ -15,6 +15,7 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
   const [updatingId, setUpdatingId] = useState(null);
 
   const isMountedRef = useRef(true);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -32,13 +33,12 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
   }, [searchQuery]);
 
   const loadOrders = useCallback(async () => {
+    const currentRequestId = ++requestIdRef.current;
     try {
       setLoading(true);
       const params = { page, limit: pageSize };
 
-      if (isCancelledOnly) {
-        params.status = "cancelled";
-      } else if (statusFilter !== "all") {
+      if (!isCancelledOnly && statusFilter !== "all") {
         params.status = statusFilter;
       }
 
@@ -46,19 +46,31 @@ export function useOrders({ initialStatus = "all", isCancelledOnly = false } = {
         params.search = debouncedSearch;
       }
 
-      const data = await fetchOrdersApi(params);
+      const data = isCancelledOnly
+        ? await fetchCancelledOrdersApi(params)
+        : await fetchOrdersApi(params);
 
-      if (isMountedRef.current && data?.success) {
+      if (
+        isMountedRef.current &&
+        currentRequestId === requestIdRef.current &&
+        data?.success
+      ) {
         setOrders(data.orders || []);
         setTotal(data.total || 0);
         setTotalPages(Math.max(1, data.totalPages || 1));
       }
     } catch (err) {
-      if (isMountedRef.current) {
+      if (
+        isMountedRef.current &&
+        currentRequestId === requestIdRef.current
+      ) {
         toast.error(err.response?.data?.message || "Failed to load orders");
       }
     } finally {
-      if (isMountedRef.current) {
+      if (
+        isMountedRef.current &&
+        currentRequestId === requestIdRef.current
+      ) {
         setLoading(false);
       }
     }

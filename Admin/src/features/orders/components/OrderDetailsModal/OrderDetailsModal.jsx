@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { updateOrderStatusApi } from "../../services/order.api";
@@ -18,6 +18,15 @@ const STATUS_OPTIONS = [
 export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
   const [selectedStatus, setSelectedStatus] = useState(order?.orderStatus || "placed");
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   if (!order) return null;
 
@@ -52,9 +61,13 @@ export default function OrderDetailsModal({ order, onClose, onStatusUpdated }) {
         onClose();
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to update order status");
+      if (isMountedRef.current) {
+        toast.error(err.response?.data?.message || "Failed to update order status");
+      }
     } finally {
-      setIsUpdating(false);
+      if (isMountedRef.current) {
+        setIsUpdating(false);
+      }
     }
   };
 
