@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Save, CloudUpload, X, ArrowLeft } from "lucide-react";
 import styles from "./CreateProduct.module.css";
@@ -52,15 +52,26 @@ export default function EditProductPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await fetchCategoriesApi();
-        if (data.success) {
-          setCategoriesList(data.categories);
+        if (isMountedRef.current && data?.success) {
+          setCategoriesList(data.categories || []);
         }
       } catch (error) {
-        console.error("Failed to fetch categories", error);
+        if (isMountedRef.current) {
+          toast.error(error.response?.data?.message || "Failed to load categories");
+        }
       }
     };
 
@@ -73,7 +84,7 @@ export default function EditProductPage() {
       try {
         setIsLoading(true);
         const data = await fetchAdminProductByIdApi(id);
-        if (data.success) {
+        if (isMountedRef.current && data?.success && data.product) {
           const product = data.product;
           
           setFormData({
@@ -103,10 +114,13 @@ export default function EditProductPage() {
           setExistingImages(loadedExistingImages);
         }
       } catch (error) {
-        console.error("Failed to fetch product details", error);
-        toast.error("Failed to load product details");
+        if (isMountedRef.current) {
+          toast.error(error.response?.data?.message || "Failed to load product details");
+        }
       } finally {
-        setIsLoading(false);
+        if (isMountedRef.current) {
+          setIsLoading(false);
+        }
       }
     };
     fetchProductDetails();
@@ -114,7 +128,6 @@ export default function EditProductPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Reset subcategory when category changes
     if (name === "category") {
       setFormData((prev) => ({ ...prev, category: value, subcategory: "" }));
     } else {
@@ -260,17 +273,20 @@ export default function EditProductPage() {
 
       const res = await updateProductApi(id, data);
 
-      if (res.success) {
+      if (res?.success) {
         toast.success("Product updated successfully!");
         setTimeout(() => {
-          navigate("/admin/products");
+          if (isMountedRef.current) {
+            navigate("/admin/products");
+          }
         }, 800);
       }
     } catch (error) {
-      console.error("Error updating product:", error);
       toast.error(error.response?.data?.message || "Failed to update product.");
     } finally {
-      setIsSubmitting(false);
+      if (isMountedRef.current) {
+        setIsSubmitting(false);
+      }
     }
   };
 

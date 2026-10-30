@@ -81,8 +81,14 @@ export function useProducts({ limit = 100 } = {}) {
     });
   };
 
-  const totalPages = Math.ceil(filteredProducts.length / pageSize) || 1;
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
   const paginatedProducts = filteredProducts.slice((page - 1) * pageSize, page * pageSize);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
   const handlePageSizeChange = (newSize) => {
     setPageSize(newSize);

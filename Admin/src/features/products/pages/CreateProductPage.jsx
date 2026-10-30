@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Save, CloudUpload, X } from "lucide-react";
 import styles from "./CreateProduct.module.css";
@@ -48,15 +48,26 @@ export default function CreateProductPage() {
   const [categoriesList, setCategoriesList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await fetchCategoriesApi();
-        if (data.success) {
-          setCategoriesList(data.categories);
+        if (isMountedRef.current && data?.success) {
+          setCategoriesList(data.categories || []);
         }
       } catch (error) {
-        console.error("Failed to fetch categories", error);
+        if (isMountedRef.current) {
+          toast.error(error.response?.data?.message || "Failed to load categories");
+        }
       }
     };
 
@@ -65,7 +76,6 @@ export default function CreateProductPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Reset subcategory when category changes
     if (name === "category") {
       setFormData((prev) => ({ ...prev, category: value, subcategory: "" }));
     } else {
@@ -176,17 +186,20 @@ export default function CreateProductPage() {
 
       const res = await createProductApi(data);
 
-      if (res.success) {
+      if (res?.success) {
         toast.success("Product created successfully!");
         setTimeout(() => {
-          navigate("/admin/products");
+          if (isMountedRef.current) {
+            navigate("/admin/products");
+          }
         }, 800);
       }
     } catch (error) {
-      console.error("Error creating product:", error);
       toast.error(error.response?.data?.message || "Failed to create product.");
     } finally {
-      setIsSubmitting(false);
+      if (isMountedRef.current) {
+        setIsSubmitting(false);
+      }
     }
   };
 
