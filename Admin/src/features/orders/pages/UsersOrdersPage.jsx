@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, XCircle } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useOrders } from "../hooks/useOrders";
 import OrderDetailsModal from "../components/OrderDetailsModal/OrderDetailsModal";
@@ -255,7 +255,7 @@ export default function UsersOrdersPage() {
                             title="Cancel Order"
                             disabled={order.orderStatus === "cancelled"}
                           >
-                            <XCircle size={18} />
+                            <Trash2 size={18} />
                           </button>
                         </div>
                       </td>

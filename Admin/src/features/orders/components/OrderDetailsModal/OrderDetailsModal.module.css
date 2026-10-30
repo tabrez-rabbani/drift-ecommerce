@@ -280,25 +280,32 @@
 }
 
 .statusSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-color: #272a33;
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  padding: 8px 36px 8px 14px;
+  padding: 8px 38px 8px 14px;
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   outline: none;
-  transition: border-color 0.2s ease;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='white' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'></path></svg>");
+  background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%23ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>');
   background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 14px;
+  background-position: right 14px center;
+  background-size: 13px;
+  transition: border-color 0.2s ease;
 }
 
+.statusSelect:hover,
 .statusSelect:focus {
   border-color: #02a9f7;
+}
+
+.statusSelect option {
+  background-color: #272a33;
+  color: #ffffff;
 }
 
 .updateBtn {
