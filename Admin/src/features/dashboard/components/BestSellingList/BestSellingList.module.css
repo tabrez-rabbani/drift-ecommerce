@@ -59,8 +59,8 @@
 }
 
 .itemThumbnail {
-  width: 58px;
-  height: 58px;
+  width: 72px;
+  height: 80px;
   border-radius: 6px;
   object-fit: cover;
   object-position: top center;
@@ -77,14 +77,14 @@
 }
 
 .fieldLabel {
-  font-size: 12px;
+  font-size: 13px;
   color: #8e93a0;
   font-weight: 500;
   margin: 0;
 }
 
 .fieldValue {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: #e5e7eb;
   margin: 0;
@@ -125,8 +125,8 @@
   }
 
   .itemThumbnail {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 64px;
   }
 
   .infoCol {
