@@ -82,3 +82,4 @@ export default function HeroSlideCard({ slide, onEdit, onToggle, onDelete }) {
     </div>
   );
 }
+

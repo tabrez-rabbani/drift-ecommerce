@@ -28,3 +28,4 @@ export async function deleteHeroSlideApi(id) {
   const response = await authApiInstance.delete(`/hero/${id}`);
   return response.data;
 }
+

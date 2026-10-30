@@ -14,6 +14,7 @@ export function useHeroSlides() {
   const [submitting, setSubmitting] = useState(false);
 
   const isMountedRef = useRef(true);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -23,18 +24,29 @@ export function useHeroSlides() {
   }, []);
 
   const loadSlides = useCallback(async () => {
+    const currentRequestId = ++requestIdRef.current;
     try {
       setLoading(true);
       const data = await fetchHeroSlidesApi();
-      if (isMountedRef.current && data?.success) {
+      if (
+        isMountedRef.current &&
+        currentRequestId === requestIdRef.current &&
+        data?.success
+      ) {
         setSlides(data.slides || []);
       }
     } catch (err) {
-      if (isMountedRef.current) {
+      if (
+        isMountedRef.current &&
+        currentRequestId === requestIdRef.current
+      ) {
         toast.error(err.response?.data?.message || "Failed to load hero banners");
       }
     } finally {
-      if (isMountedRef.current) {
+      if (
+        isMountedRef.current &&
+        currentRequestId === requestIdRef.current
+      ) {
         setLoading(false);
       }
     }
@@ -62,7 +74,9 @@ export function useHeroSlides() {
       }
       return false;
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to save hero slide");
+      if (isMountedRef.current) {
+        toast.error(err.response?.data?.message || "Failed to save hero slide");
+      }
       return false;
     } finally {
       if (isMountedRef.current) {
@@ -106,7 +120,9 @@ export function useHeroSlides() {
               toast.success("Hero slide deleted successfully!");
             }
           } catch (err) {
-            toast.error(err.response?.data?.message || "Failed to delete slide");
+            if (isMountedRef.current) {
+              toast.error(err.response?.data?.message || "Failed to delete slide");
+            }
           }
         },
       },
