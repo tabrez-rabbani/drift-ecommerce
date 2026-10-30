@@ -1,4 +1,4 @@
-import { Plus, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import CategoryTableRow from "./CategoryTableRow";
 import styles from "./CategoryTable.module.css";
 
@@ -6,6 +6,7 @@ export default function CategoryTable({
   categories,
   loading,
   updatingId,
+  isFormOpen,
   onAddClick,
   onEdit,
   onDelete,
@@ -13,47 +14,49 @@ export default function CategoryTable({
 }) {
   return (
     <div className={styles.card}>
-      <div className={styles.tableHeader}>
-        <h2 className={styles.cardTitle}>
-          All Categories ({categories.length})
-        </h2>
-      </div>
-
-      {loading ? (
-        <div className={styles.loadingState}>
-          <Loader2 size={32} className={styles.spinner} />
-          <p>Loading categories...</p>
+      <div className={styles.cardHeader}>
+        <div className={styles.titleWrapper}>
+          <div className={styles.titleLine} />
+          <h2 className={styles.cardTitle}>Categories List</h2>
         </div>
-      ) : categories.length === 0 ? (
-        <div className={styles.emptyState}>
-          <ImageIcon size={48} className={styles.emptyIcon} />
-          <p className={styles.emptyTitle}>No categories found</p>
-          <p className={styles.emptyText}>
-            Add your first category to have it display on the homepage slider.
-          </p>
+        {!isFormOpen && (
           <button
             type="button"
-            className={styles.primaryBtn}
+            className={styles.addBtn}
             onClick={onAddClick}
           >
-            <Plus size={18} />
+            <Plus size={18} strokeWidth={2.5} />
             <span>Add Category</span>
           </button>
-        </div>
-      ) : (
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
+        )}
+      </div>
+
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>Thumbnail</th>
+              <th>Category Name</th>
+              <th>Storefront Link</th>
+              <th>Display Order</th>
+              <th>Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
               <tr>
-                <th className={styles.thThumbnail}>Thumbnail</th>
-                <th>Name</th>
-                <th>Slug</th>
-                <th className={styles.thOrder}>Order</th>
-                <th className={styles.thActions}>Actions</th>
+                <td colSpan={5} className={styles.emptyState}>
+                  Loading categories...
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {categories.map((cat) => (
+            ) : categories.length === 0 ? (
+              <tr>
+                <td colSpan={5} className={styles.emptyState}>
+                  No categories found. Click &quot;Add Category&quot; above to create one.
+                </td>
+              </tr>
+            ) : (
+              categories.map((cat) => (
                 <CategoryTableRow
                   key={cat._id}
                   category={cat}
@@ -62,12 +65,11 @@ export default function CategoryTable({
                   onDelete={onDelete}
                   onQuickImageChange={onQuickImageChange}
                 />
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
-

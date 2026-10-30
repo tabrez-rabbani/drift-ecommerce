@@ -5,7 +5,7 @@ import styles from "./CategoryForm.module.css";
 
 export default function CategoryForm({ initialData, submitting, onSubmit, onClose }) {
   const [name, setName] = useState(initialData?.name || "");
-  const [order, setOrder] = useState(initialData?.order || 0);
+  const [order, setOrder] = useState(initialData?.order ?? 0);
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const currentImageUrl = initialData?.image || "";
@@ -64,9 +64,12 @@ export default function CategoryForm({ initialData, submitting, onSubmit, onClos
   return (
     <div className={styles.formCard}>
       <div className={styles.formCardHeader}>
-        <h2 className={styles.formCardTitle}>
-          {initialData?._id ? "Edit Category" : "Add New Category"}
-        </h2>
+        <div className={styles.titleWrapper}>
+          <div className={styles.titleLine} />
+          <h2 className={styles.formCardTitle}>
+            {initialData?._id ? "Edit Category" : "Add New Category"}
+          </h2>
+        </div>
         <button
           type="button"
           className={styles.closeBtn}
@@ -78,9 +81,9 @@ export default function CategoryForm({ initialData, submitting, onSubmit, onClos
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formGrid}>
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Category Name *</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Category Name *</label>
+          <div className={styles.inputWrapper}>
             <input
               type="text"
               className={styles.input}
@@ -90,65 +93,69 @@ export default function CategoryForm({ initialData, submitting, onSubmit, onClos
               required
             />
           </div>
+        </div>
 
-          <div className={styles.formGroup}>
-            <label className={styles.label}>Display Order (Priority)</label>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Display Order</label>
+          <div className={styles.inputWrapper}>
             <input
               type="number"
               className={styles.input}
               placeholder="0, 1, 2..."
               value={order}
-              onChange={(e) => setOrder(Number(e.target.value))}
+              onChange={(e) => setOrder(e.target.value)}
             />
           </div>
         </div>
 
-        <div className={styles.formGroup}>
-          <label className={styles.label}>Category Thumbnail</label>
-          <div className={styles.uploadArea}>
-            <div className={styles.previewBox}>
-              {imagePreview ? (
-                <img src={imagePreview} alt="Preview" className={styles.previewImage} />
-              ) : currentImageUrl ? (
-                <img src={currentImageUrl} alt="Current" className={styles.previewImage} />
-              ) : (
-                <div className={styles.placeholderBox}>
-                  <ImageIcon size={32} />
-                  <span>No image selected</span>
-                </div>
-              )}
-            </div>
+        <div className={`${styles.formGroup} ${styles.formGroupTop}`}>
+          <label className={`${styles.label} ${styles.labelTop}`}>Category Thumbnail</label>
+          <div className={styles.inputWrapper}>
+            <div className={styles.uploadArea}>
+              <div className={styles.previewBox}>
+                {imagePreview ? (
+                  <img src={imagePreview} alt="Preview" className={styles.previewImage} />
+                ) : currentImageUrl ? (
+                  <img src={currentImageUrl} alt="Current" className={styles.previewImage} />
+                ) : (
+                  <div className={styles.placeholderBox}>
+                    <ImageIcon size={28} />
+                    <span>No image</span>
+                  </div>
+                )}
+              </div>
 
-            <div className={styles.uploadControls}>
-              <button
-                type="button"
-                className={styles.uploadBtn}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Upload size={16} />
-                <span>{selectedFile || currentImageUrl ? "Change Image" : "Upload Image"}</span>
-              </button>
-
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className={styles.hiddenInput}
-                onChange={handleFileChange}
-              />
-
-              {selectedFile && (
+              <div className={styles.uploadControls}>
                 <button
                   type="button"
-                  className={styles.removeImageBtn}
-                  onClick={handleClearImage}
+                  className={styles.uploadBtn}
+                  onClick={() => fileInputRef.current?.click()}
                 >
-                  Clear Selection
+                  <Upload size={16} />
+                  <span>{selectedFile || currentImageUrl ? "Change Image" : "Upload Image"}</span>
                 </button>
-              )}
-              <span className={styles.uploadHint}>
-                Recommended: Transparent PNG or WebP with text cutout (800x898 ratio). Max 5MB.
-              </span>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className={styles.hiddenInput}
+                  onChange={handleFileChange}
+                />
+
+                {selectedFile && (
+                  <button
+                    type="button"
+                    className={styles.removeImageBtn}
+                    onClick={handleClearImage}
+                  >
+                    Clear Selection
+                  </button>
+                )}
+                <span className={styles.uploadHint}>
+                  Recommended: Transparent PNG or WebP (800x898 ratio). Max 5MB.
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -173,7 +180,7 @@ export default function CategoryForm({ initialData, submitting, onSubmit, onClos
                 <span>Saving...</span>
               </>
             ) : (
-              <span>{initialData?._id ? "Update Category" : "Create Category"}</span>
+              <span>{initialData?._id ? "Update Category" : "Save Category"}</span>
             )}
           </button>
         </div>
@@ -181,4 +188,3 @@ export default function CategoryForm({ initialData, submitting, onSubmit, onClos
     </div>
   );
 }
-

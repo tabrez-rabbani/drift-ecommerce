@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import {
   fetchCategoriesApi,
@@ -53,11 +52,13 @@ export default function CategoriesPage() {
   const handleOpenAddForm = () => {
     setEditingCategory(null);
     setIsFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleOpenEditForm = (category) => {
     setEditingCategory(category);
     setIsFormOpen(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCloseForm = () => {
@@ -155,29 +156,6 @@ export default function CategoriesPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <div>
-          <div className={styles.titleWrapper}>
-            <div className={styles.titleLine} />
-            <h1 className={styles.title}>Categories</h1>
-          </div>
-          <p className={styles.subtitle}>
-            Manage product categories, upload thumbnails, and arrange slider order on the homepage.
-          </p>
-        </div>
-
-        {!isFormOpen && (
-          <button
-            type="button"
-            className={styles.primaryBtn}
-            onClick={handleOpenAddForm}
-          >
-            <Plus size={18} />
-            <span>Add Category</span>
-          </button>
-        )}
-      </div>
-
       {isFormOpen && (
         <CategoryForm
           initialData={editingCategory}
@@ -191,6 +169,7 @@ export default function CategoriesPage() {
         categories={categories}
         loading={loading}
         updatingId={updatingId}
+        isFormOpen={isFormOpen}
         onAddClick={handleOpenAddForm}
         onEdit={handleOpenEditForm}
         onDelete={handleDelete}
@@ -199,4 +178,3 @@ export default function CategoriesPage() {
     </div>
   );
 }
-
