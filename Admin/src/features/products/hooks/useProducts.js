@@ -8,7 +8,7 @@ export function useProducts({ limit = 100 } = {}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const pageSize = 15;
+  const [pageSize, setPageSize] = useState(10);
 
   const isMountedRef = useRef(true);
 
@@ -84,6 +84,11 @@ export function useProducts({ limit = 100 } = {}) {
   const totalPages = Math.ceil(filteredProducts.length / pageSize) || 1;
   const paginatedProducts = filteredProducts.slice((page - 1) * pageSize, page * pageSize);
 
+  const handlePageSizeChange = (newSize) => {
+    setPageSize(newSize);
+    setPage(1);
+  };
+
   return {
     products,
     filteredProducts: paginatedProducts,
@@ -93,6 +98,8 @@ export function useProducts({ limit = 100 } = {}) {
     isLoading,
     page,
     setPage,
+    pageSize,
+    setPageSize: handlePageSizeChange,
     totalPages,
     deleteProduct,
     refreshProducts: loadProducts,

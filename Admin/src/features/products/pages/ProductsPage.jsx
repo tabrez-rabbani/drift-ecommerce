@@ -13,6 +13,8 @@ export default function ProductsPage() {
     isLoading,
     page,
     setPage,
+    pageSize,
+    setPageSize,
     totalPages,
     deleteProduct,
   } = useProducts();
@@ -143,7 +145,10 @@ export default function ProductsPage() {
           page={page}
           totalPages={totalPages}
           total={totalCount}
+          pageSize={pageSize}
           onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          pageSizeOptions={[5, 10, 20, 50]}
         />
       </div>
     </div>
