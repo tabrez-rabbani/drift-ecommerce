@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
-import authApiInstance from "@/lib/axios";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import CategoryForm from "./components/CategoryForm/CategoryForm";
-import CategoryTable from "./components/CategoryTable/CategoryTable";
+import {
+  fetchCategoriesApi,
+  createCategoryApi,
+  updateCategoryApi,
+  deleteCategoryApi,
+} from "../services/category.api";
+import CategoryForm from "../components/CategoryForm/CategoryForm";
+import CategoryTable from "../components/CategoryTable/CategoryTable";
 import styles from "./CategoriesPage.module.css";
 
 export default function CategoriesPage() {
@@ -14,23 +19,36 @@ export default function CategoriesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [updatingId, setUpdatingId] = useState(null);
 
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      const res = await authApiInstance.get("/categories");
-      if (res.data?.success && Array.isArray(res.data.categories)) {
-        setCategories(res.data.categories);
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to load categories");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
-    fetchCategories();
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
   }, []);
+
+  const loadCategories = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchCategoriesApi();
+      if (isMountedRef.current && data?.success && Array.isArray(data.categories)) {
+        setCategories(data.categories);
+      }
+    } catch (err) {
+      if (isMountedRef.current) {
+        toast.error(err.response?.data?.message || "Failed to load categories");
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
 
   const handleOpenAddForm = () => {
     setEditingCategory(null);
@@ -58,24 +76,26 @@ export default function CategoriesPage() {
       }
 
       if (editingCategory?._id) {
-        const res = await authApiInstance.put(`/categories/${editingCategory._id}`, formData);
-        if (res.data?.success) {
+        const data = await updateCategoryApi(editingCategory._id, formData);
+        if (data?.success) {
           toast.success("Category updated successfully");
           handleCloseForm();
-          fetchCategories();
+          loadCategories();
         }
       } else {
-        const res = await authApiInstance.post("/categories", formData);
-        if (res.data?.success) {
+        const data = await createCategoryApi(formData);
+        if (data?.success) {
           toast.success("Category created successfully");
           handleCloseForm();
-          fetchCategories();
+          loadCategories();
         }
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to save category");
     } finally {
-      setSubmitting(false);
+      if (isMountedRef.current) {
+        setSubmitting(false);
+      }
     }
   };
 
@@ -88,17 +108,21 @@ export default function CategoriesPage() {
       const formData = new FormData();
       formData.append("image", file);
 
-      const res = await authApiInstance.put(`/categories/${categoryId}`, formData);
-      if (res.data?.success && res.data.category) {
-        setCategories((prev) =>
-          prev.map((c) => (c._id === categoryId ? { ...c, image: res.data.category.image } : c))
-        );
+      const data = await updateCategoryApi(categoryId, formData);
+      if (data?.success && data.category) {
+        if (isMountedRef.current) {
+          setCategories((prev) =>
+            prev.map((c) => (c._id === categoryId ? { ...c, image: data.category.image } : c))
+          );
+        }
         toast.success("Category thumbnail updated");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update category image");
     } finally {
-      setUpdatingId(null);
+      if (isMountedRef.current) {
+        setUpdatingId(null);
+      }
       if (e.target) e.target.value = "";
     }
   };
@@ -110,9 +134,11 @@ export default function CategoriesPage() {
         label: "Delete",
         onClick: async () => {
           try {
-            const res = await authApiInstance.delete(`/categories/${cat._id}`);
-            if (res.data?.success) {
-              setCategories((prev) => prev.filter((c) => c._id !== cat._id));
+            const data = await deleteCategoryApi(cat._id);
+            if (data?.success) {
+              if (isMountedRef.current) {
+                setCategories((prev) => prev.filter((c) => c._id !== cat._id));
+              }
               toast.success("Category deleted");
             }
           } catch (err) {
@@ -173,3 +199,4 @@ export default function CategoriesPage() {
     </div>
   );
 }
+

@@ -181,3 +181,4 @@ export default function CategoryForm({ initialData, submitting, onSubmit, onClos
     </div>
   );
 }
+
