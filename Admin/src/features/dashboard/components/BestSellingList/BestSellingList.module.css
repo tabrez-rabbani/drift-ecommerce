@@ -1,0 +1,135 @@
+.sectionCard {
+  background-color: #272a33;
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: 600;
+  margin: 0;
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  color: #a0a5b1;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.actionBtn:hover {
+  color: #02a9f7;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+.itemThumbnail {
+  width: 58px;
+  height: 58px;
+  border-radius: 6px;
+  object-fit: cover;
+  background-color: #1a1c21;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  color: #8e93a0;
+  font-weight: 500;
+  margin: 0;
+}
+
+.fieldValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #8e93a0;
+  font-size: 14px;
+  min-height: 200px;
+  text-align: center;
+}
+
+.spinner {
+  color: #02a9f7;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .listItem {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .itemThumbnail {
+    width: 48px;
+    height: 48px;
+  }
+
+  .infoCol {
+    min-width: 70px;
+  }
+}
+

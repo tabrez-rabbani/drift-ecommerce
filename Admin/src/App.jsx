@@ -3,7 +3,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "sonner";
 import AdminLoginPage from "@/pages/AdminLogin/AdminLoginPage";
 import AdminLayout from "@/components/AdminLayout/AdminLayout";
-import Dashboard from "@/pages/Dashboard/Dashboard";
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import HeroPage from "@/features/hero/pages/HeroPage";
 import CategoriesPage from "@/features/categories/pages/CategoriesPage";
 import ProductsPage from "@/features/products/pages/ProductsPage";
@@ -21,7 +21,7 @@ export default function App() {
         <Routes>
           <Route path="/admin-login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
+            <Route index element={<DashboardPage />} />
             <Route path="hero" element={<HeroPage />} />
             <Route path="banners" element={<Navigate to="/admin/hero" replace />} />
             <Route path="categories" element={<CategoriesPage />} />

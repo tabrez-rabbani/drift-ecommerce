@@ -1,0 +1,122 @@
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.statCard {
+  background-color: #272a33;
+  border-radius: 10px;
+  display: flex;
+  overflow: hidden;
+  height: 94px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.statBorder {
+  width: 4px;
+  height: 50%;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 0 4px 4px 0;
+}
+
+.borderBlue {
+  background-color: #02a9f7;
+}
+
+.borderRed {
+  background-color: #ef4444;
+}
+
+.borderGold {
+  background-color: #eab308;
+}
+
+.borderPurple {
+  background-color: #a855f7;
+}
+
+.statContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #a0a5b1;
+  margin: 0 0 6px 0;
+  font-weight: 500;
+}
+
+.statValueWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.statValue {
+  font-size: 26px;
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.addNewLink {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.addNewLink:hover {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+.statIconWrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconBlue {
+  color: #02a9f7;
+  background-color: rgba(2, 169, 247, 0.1);
+}
+
+.iconRed {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.iconGold {
+  color: #eab308;
+  background-color: rgba(234, 179, 8, 0.1);
+}
+
+.iconPurple {
+  color: #a855f7;
+  background-color: rgba(168, 85, 247, 0.1);
+}
+
