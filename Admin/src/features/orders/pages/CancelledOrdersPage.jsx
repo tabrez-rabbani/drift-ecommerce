@@ -149,7 +149,7 @@ export default function CancelledOrdersPage() {
                       </td>
 
                       <td>
-                        <span className={`${styles.badge} ${styles.badgeCancelled}`}>
+                        <span className={`${styles.statusText} ${styles.statusCancelled}`}>
                           Cancelled
                         </span>
                       </td>

@@ -107,8 +107,8 @@ export default function ProductsPage() {
                       </td>
                       <td>
                         <span
-                          className={`${styles.badge} ${
-                            product.inStock ? styles.badgeStock : styles.badgeOut
+                          className={`${styles.statusText} ${
+                            product.inStock ? styles.statusStock : styles.statusOut
                           }`}
                         >
                           {product.inStock ? "In Stock" : "Out Of Stock"}

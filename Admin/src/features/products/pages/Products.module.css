@@ -170,21 +170,18 @@
   color: #a0a5b1;
 }
 
-.badge {
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 13px;
+.statusText {
+  font-size: 15px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
-.badgeStock {
-  background-color: #203629;
-  color: #409852;
+.statusStock {
+  color: #22c55e;
 }
 
-.badgeOut {
-  background-color: #42222a;
-  color: #ea565f;
+.statusOut {
+  color: #ef4444;
 }
 
 .price {

@@ -248,41 +248,34 @@
   letter-spacing: 0.05em;
 }
 
-.badge {
+.statusText {
   display: inline-block;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   text-transform: capitalize;
   white-space: nowrap;
 }
 
-.badgeDelivered,
-.badgeCompleted {
-  background-color: #203629;
-  color: #409852;
+.statusDelivered,
+.statusCompleted {
+  color: #22c55e;
 }
 
-.badgeCancelled,
-.badgeFailed {
-  background-color: #42222a;
-  color: #ea565f;
+.statusCancelled,
+.statusFailed {
+  color: #ef4444;
 }
 
-.badgeShipped {
-  background-color: #1c2e3d;
+.statusShipped {
   color: #02a9f7;
 }
 
-.badgeProcessing {
-  background-color: #3d341c;
+.statusProcessing {
   color: #f59e0b;
 }
 
-.badgePlaced,
-.badgePending {
-  background-color: #2d2638;
+.statusPlaced,
+.statusPending {
   color: #c084fc;
 }
 

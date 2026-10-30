@@ -3,14 +3,6 @@ import { Pagination } from "@/components/ui";
 import { Trash2, Users as UsersIcon } from "lucide-react";
 import styles from "./UsersPage.module.css";
 
-function getInitials(name = "") {
-  const parts = name.trim().split(" ");
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-  return (name[0] || "U").toUpperCase();
-}
-
 function formatDate(isoDate) {
   if (!isoDate) return "N/A";
   try {
@@ -108,15 +100,7 @@ export default function UsersPage() {
                   return (
                     <tr key={user._id}>
                       <td>
-                        <div className={styles.userCell}>
-                          <div className={styles.avatar}>
-                            {getInitials(user.name)}
-                          </div>
-                          <div className={styles.userInfo}>
-                            <p className={styles.userName}>{user.name}</p>
-                            <p className={styles.userId}>ID: {user._id.slice(-6)}</p>
-                          </div>
-                        </div>
+                        <span className={styles.userName}>{user.name}</span>
                       </td>
                       <td>
                         <div className={styles.contactCell}>
@@ -136,10 +120,10 @@ export default function UsersPage() {
                       </td>
                       <td>
                         <span
-                          className={`${styles.badge} ${
+                          className={`${styles.statusText} ${
                             user.isVerified
-                              ? styles.badgeVerified
-                              : styles.badgeUnverified
+                              ? styles.statusVerified
+                              : styles.statusUnverified
                           }`}
                         >
                           {user.isVerified ? "Verified" : "Unverified"}

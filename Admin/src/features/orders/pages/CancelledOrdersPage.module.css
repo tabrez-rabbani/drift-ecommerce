@@ -209,19 +209,16 @@
   margin-bottom: 4px;
 }
 
-.badge {
+.statusText {
   display: inline-block;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   text-transform: capitalize;
   white-space: nowrap;
 }
 
-.badgeCancelled {
-  background-color: #42222a;
-  color: #ea565f;
+.statusCancelled {
+  color: #ef4444;
 }
 
 .actions {

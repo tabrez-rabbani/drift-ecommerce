@@ -9,3 +9,4 @@ export async function deleteUserApi(id) {
   const response = await authApiInstance.delete(`/admin/users/${id}`);
   return response.data;
 }
+

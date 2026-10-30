@@ -69,20 +69,20 @@ export default function UsersOrdersPage() {
     });
   };
 
-  const getStatusBadgeClass = (status) => {
+  const getStatusTextClass = (status) => {
     switch (status) {
       case "delivered":
       case "completed":
-        return styles.badgeDelivered;
+        return styles.statusDelivered;
       case "cancelled":
       case "failed":
-        return styles.badgeCancelled;
+        return styles.statusCancelled;
       case "shipped":
-        return styles.badgeShipped;
+        return styles.statusShipped;
       case "processing":
-        return styles.badgeProcessing;
+        return styles.statusProcessing;
       default:
-        return styles.badgePlaced;
+        return styles.statusPlaced;
     }
   };
 
@@ -215,7 +215,7 @@ export default function UsersOrdersPage() {
 
                       <td>
                         <span
-                          className={`${styles.badge} ${getStatusBadgeClass(
+                          className={`${styles.statusText} ${getStatusTextClass(
                             order.paymentStatus || "pending"
                           )}`}
                         >
