@@ -11,6 +11,7 @@ import CreateProductPage from "@/features/products/pages/CreateProductPage";
 import EditProductPage from "@/features/products/pages/EditProductPage";
 import UsersOrdersPage from "@/features/orders/pages/UsersOrdersPage";
 import CancelledOrdersPage from "@/features/orders/pages/CancelledOrdersPage";
+import UsersPage from "@/features/users/pages/UsersPage";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="orders" element={<Navigate to="/admin/orders/users-orders" replace />} />
             <Route path="orders/users-orders" element={<UsersOrdersPage />} />
             <Route path="orders/cancel-orders" element={<CancelledOrdersPage />} />
+            <Route path="users" element={<UsersPage />} />
           </Route>
           <Route path="/" element={<Navigate to="/admin" replace />} />
           <Route path="*" element={<Navigate to="/admin" replace />} />
