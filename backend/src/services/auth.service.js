@@ -225,20 +225,14 @@ export const loginAdminService = async (userData) => {
 
     const user = await findUserByEmail(email);
 
-    // Email not in DB at all
-    if (!user) {
-        throw new AppError("No admin account found for this email.", 403);
+    if (!user || user.role !== "admin") {
+        throw new AppError("Invalid email or password", 401);
     }
 
     const isPasswordMatched = await user.comparePassword(password);
 
     if (!isPasswordMatched) {
-        throw new AppError("Invalid credentials.", 401);
-    }
-
-    // Email exists but is a buyer, not admin
-    if (user.role !== "admin") {
-        throw new AppError("Access Denied. This account does not have admin privileges.", 403);
+        throw new AppError("Invalid email or password", 401);
     }
 
     const accessToken = generateAccessToken(user);

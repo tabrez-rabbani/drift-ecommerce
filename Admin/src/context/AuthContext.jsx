@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import authApiInstance from "@/lib/axios";
 import { toast } from "sonner";
+import { fetchCurrentUserApi, adminLogoutApi } from "@/features/auth/services/auth.api";
 
 const AuthContext = createContext(undefined);
 
@@ -9,12 +9,16 @@ export function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuth = async () => {
       try {
         setIsLoading(true);
-        const response = await authApiInstance.get("/auth/get-me");
-        if (response.data.success) {
-          const userData = response.data.user;
+        const data = await fetchCurrentUserApi();
+        if (!isMounted) return;
+
+        if (data?.success) {
+          const userData = data.user;
           setUser(userData);
 
           const params = new URLSearchParams(window.location.search);
@@ -25,18 +29,22 @@ export function AuthProvider({ children }) {
           }
         }
       } catch {
-        setUser(null);
+        if (isMounted) setUser(null);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
     checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const logout = async () => {
     try {
-      await authApiInstance.get("/auth/logout");
+      await adminLogoutApi();
       setUser(null);
       toast.success("You have been signed out successfully.");
     } catch {

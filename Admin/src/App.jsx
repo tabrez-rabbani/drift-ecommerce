@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "sonner";
-import AdminLoginPage from "@/pages/AdminLogin/AdminLoginPage";
+import AdminLoginPage from "@/features/auth/pages/AdminLoginPage";
 import AdminLayout from "@/components/AdminLayout/AdminLayout";
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import HeroPage from "@/features/hero/pages/HeroPage";
