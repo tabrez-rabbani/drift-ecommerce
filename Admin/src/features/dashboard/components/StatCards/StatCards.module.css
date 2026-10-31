@@ -1,7 +1,19 @@
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .statCard {
@@ -26,10 +38,6 @@
   margin-top: auto;
   margin-bottom: auto;
   border-radius: 0 4px 4px 0;
-}
-
-.borderBlue {
-  background-color: #02a9f7;
 }
 
 .borderRed {
@@ -111,10 +119,6 @@
   flex-shrink: 0;
 }
 
-.iconBlue {
-  color: #02a9f7;
-}
-
 .iconRed {
   color: #ef4444;
 }
@@ -130,4 +134,3 @@
 .iconGreen {
   color: #22c55e;
 }
-

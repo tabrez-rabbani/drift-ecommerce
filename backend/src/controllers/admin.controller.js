@@ -83,12 +83,21 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
             {
                 $group: {
                     _id: "$prod.category",
+                    image: {
+                        $first: {
+                            $ifNull: [
+                                "$items.image",
+                                { $arrayElemAt: [{ $arrayElemAt: ["$prod.colors.images", 0] }, 0] },
+                            ],
+                        },
+                    },
+                    orderCount: { $sum: 1 },
                     totalSold: { $sum: "$items.quantity" },
                     totalRevenue: { $sum: { $multiply: ["$items.price.amount", "$items.quantity"] } },
                 },
             },
             { $sort: { totalSold: -1 } },
-            { $limit: 5 },
+            { $limit: 4 },
         ]),
         userModel.countDocuments({ role: "buyer", createdAt: { $gte: startOfMonth } }),
         productModel.countDocuments({ inStock: false }),

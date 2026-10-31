@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, ShoppingBasket, ShoppingCart, UserPlus, IndianRupee } from "lucide-react";
+import { ShoppingBasket, ShoppingCart, UserPlus, IndianRupee } from "lucide-react";
 import styles from "./StatCards.module.css";
 
 function formatRevenue(amount) {
@@ -11,21 +11,6 @@ function formatRevenue(amount) {
 export default function StatCards({ stats, loading }) {
   return (
     <div className={styles.statsGrid}>
-      <div className={styles.statCard}>
-        <div className={`${styles.statBorder} ${styles.borderBlue}`} />
-        <div className={styles.statContent}>
-          <div>
-            <p className={styles.statLabel}>Total Contacts</p>
-            <h3 className={styles.statValue}>
-              {loading ? "..." : stats.totalContacts}
-            </h3>
-          </div>
-          <div className={`${styles.statIconWrapper} ${styles.iconBlue}`}>
-            <Mail size={22} />
-          </div>
-        </div>
-      </div>
-
       <div className={styles.statCard}>
         <div className={`${styles.statBorder} ${styles.borderRed}`} />
         <div className={styles.statContent}>
