@@ -30,6 +30,14 @@ const INITIAL_STATS = {
   topCategories: [],
   newUsersThisMonth: 0,
   outOfStockCount: 0,
+  orderStatusBreakdown: {
+    placed: 0,
+    processing: 0,
+    shipped: 0,
+    delivered: 0,
+    cancelled: 0,
+  },
+  pendingPaymentsCount: 0,
 };
 
 export function useDashboard() {

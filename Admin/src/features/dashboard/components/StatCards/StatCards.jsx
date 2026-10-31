@@ -19,6 +19,15 @@ export default function StatCards({ stats, loading }) {
             <h3 className={styles.statValue}>
               {loading ? "..." : stats.totalOrders}
             </h3>
+            {!loading && stats.pendingPaymentsCount > 0 ? (
+              <p className={styles.statWarningLabel}>
+                {stats.pendingPaymentsCount} pending payment
+              </p>
+            ) : (
+              !loading && (
+                <p className={styles.statSubLabel}>All payments cleared</p>
+              )
+            )}
           </div>
           <div className={`${styles.statIconWrapper} ${styles.iconRed}`}>
             <ShoppingBasket size={22} />
@@ -42,6 +51,15 @@ export default function StatCards({ stats, loading }) {
                 ADD NEW
               </Link>
             </div>
+            {!loading && stats.outOfStockCount > 0 ? (
+              <Link to="/admin/products" className={styles.statAlertLink}>
+                {stats.outOfStockCount} out of stock
+              </Link>
+            ) : (
+              !loading && (
+                <p className={styles.statSubLabel}>All items in stock</p>
+              )
+            )}
           </div>
           <div className={`${styles.statIconWrapper} ${styles.iconGold}`}>
             <ShoppingCart size={22} />
@@ -57,9 +75,11 @@ export default function StatCards({ stats, loading }) {
             <h3 className={styles.statValue}>
               {loading ? "..." : stats.totalUsers}
             </h3>
-            {!loading && stats.newUsersThisMonth > 0 && (
+            {!loading && (
               <p className={styles.statSubLabel}>
-                +{stats.newUsersThisMonth} this month
+                {stats.newUsersThisMonth > 0
+                  ? `+${stats.newUsersThisMonth} this month`
+                  : "Buyer accounts"}
               </p>
             )}
           </div>

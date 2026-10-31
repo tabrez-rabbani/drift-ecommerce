@@ -24,6 +24,8 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
         topCategories,
         newUsersThisMonth,
         outOfStockCount,
+        orderStatusCounts,
+        pendingPaymentsCount,
     ] = await Promise.all([
         productModel.countDocuments(),
         orderModel.countDocuments(),
@@ -101,9 +103,34 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
         ]),
         userModel.countDocuments({ role: "buyer", createdAt: { $gte: startOfMonth } }),
         productModel.countDocuments({ inStock: false }),
+        orderModel.aggregate([
+            {
+                $group: {
+                    _id: "$orderStatus",
+                    count: { $sum: 1 },
+                },
+            },
+        ]),
+        orderModel.countDocuments({ paymentStatus: "pending" }),
     ]);
 
     const totalRevenue = revenueData[0]?.total || 0;
+
+    const orderStatusBreakdown = {
+        placed: 0,
+        processing: 0,
+        shipped: 0,
+        delivered: 0,
+        cancelled: 0,
+    };
+
+    if (Array.isArray(orderStatusCounts)) {
+        orderStatusCounts.forEach((item) => {
+            if (item._id && orderStatusBreakdown[item._id] !== undefined) {
+                orderStatusBreakdown[item._id] = item.count;
+            }
+        });
+    }
 
     res.status(200).json({
         success: true,
@@ -120,6 +147,8 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
             topCategories,
             newUsersThisMonth,
             outOfStockCount,
+            orderStatusBreakdown,
+            pendingPaymentsCount,
         },
     });
 });

@@ -1,5 +1,6 @@
 import { useDashboard } from "../hooks/useDashboard";
 import StatCards from "../components/StatCards/StatCards";
+import OrderStatusBanner from "../components/OrderStatusBanner/OrderStatusBanner";
 import OrderTrendsChart from "../components/OrderTrendsChart/OrderTrendsChart";
 import RevenueTrendChart from "../components/RevenueTrendChart/RevenueTrendChart";
 import BestSellingList from "../components/BestSellingList/BestSellingList";
@@ -23,6 +24,12 @@ export default function DashboardPage() {
   return (
     <div className={styles.container}>
       <StatCards stats={stats} loading={loading} />
+
+      <OrderStatusBanner
+        orderStatusBreakdown={stats.orderStatusBreakdown}
+        totalOrders={stats.totalOrders}
+        loading={loading}
+      />
 
       <div className={styles.showcaseGrid}>
         <OrderTrendsChart
