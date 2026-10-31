@@ -27,6 +27,9 @@ const INITIAL_STATS = {
   recentProducts: [],
   recentOrders: [],
   bestSellingProducts: [],
+  topCategories: [],
+  newUsersThisMonth: 0,
+  outOfStockCount: 0,
 };
 
 export function useDashboard() {
@@ -81,16 +84,25 @@ export function useDashboard() {
     return item ? item.count : 0;
   });
 
+  const monthlyRevenue = MONTH_NAMES.map((_, index) => {
+    const item = stats.monthlyOrders?.find((m) => m._id === index + 1);
+    return item ? item.revenue : 0;
+  });
+
   const maxOrderCount = Math.max(...monthlyCounts, 5);
+  const maxRevenue = Math.max(...monthlyRevenue, 1);
   const totalOrdersThisYear = monthlyCounts.reduce((acc, c) => acc + c, 0);
+  const totalRevenueThisYear = monthlyRevenue.reduce((acc, r) => acc + r, 0);
 
   return {
     stats,
     loading,
     monthlyCounts,
+    monthlyRevenue,
     maxOrderCount,
+    maxRevenue,
     totalOrdersThisYear,
+    totalRevenueThisYear,
     refreshStats: loadStats,
   };
 }
-

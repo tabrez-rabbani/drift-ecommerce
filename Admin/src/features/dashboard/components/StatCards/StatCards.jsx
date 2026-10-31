@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
-import { Mail, ShoppingBasket, ShoppingCart, UserPlus } from "lucide-react";
+import { Mail, ShoppingBasket, ShoppingCart, UserPlus, IndianRupee } from "lucide-react";
 import styles from "./StatCards.module.css";
+
+function formatRevenue(amount) {
+  if (amount >= 100000) return `${(amount / 100000).toFixed(1)}L`;
+  if (amount >= 1000) return `${(amount / 1000).toFixed(1)}K`;
+  return amount.toString();
+}
 
 export default function StatCards({ stats, loading }) {
   return (
@@ -66,13 +72,33 @@ export default function StatCards({ stats, loading }) {
             <h3 className={styles.statValue}>
               {loading ? "..." : stats.totalUsers}
             </h3>
+            {!loading && stats.newUsersThisMonth > 0 && (
+              <p className={styles.statSubLabel}>
+                +{stats.newUsersThisMonth} this month
+              </p>
+            )}
           </div>
           <div className={`${styles.statIconWrapper} ${styles.iconPurple}`}>
             <UserPlus size={22} />
           </div>
         </div>
       </div>
+
+      <div className={styles.statCard}>
+        <div className={`${styles.statBorder} ${styles.borderGreen}`} />
+        <div className={styles.statContent}>
+          <div>
+            <p className={styles.statLabel}>Total Revenue</p>
+            <h3 className={styles.statValue}>
+              {loading ? "..." : `₹${formatRevenue(stats.totalRevenue)}`}
+            </h3>
+            <p className={styles.statSubLabel}>Completed payments</p>
+          </div>
+          <div className={`${styles.statIconWrapper} ${styles.iconGreen}`}>
+            <IndianRupee size={22} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
-

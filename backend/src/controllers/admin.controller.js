@@ -7,8 +7,10 @@ import { getAllUsers, deleteUserById } from "../dao/user.dao.js";
 import AppError from "../utils/AppError.js";
 
 export const getDashboardStats = asyncHandler(async (_req, res) => {
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
+    const currentYear = now.getFullYear();
     const startOfYear = new Date(currentYear, 0, 1);
+    const startOfMonth = new Date(currentYear, now.getMonth(), 1);
 
     const [
         totalProducts,
@@ -19,6 +21,9 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
         recentProducts,
         recentOrders,
         bestSellingProducts,
+        topCategories,
+        newUsersThisMonth,
+        outOfStockCount,
     ] = await Promise.all([
         productModel.countDocuments(),
         orderModel.countDocuments(),
@@ -64,6 +69,29 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
             { $sort: { quantity: -1 } },
             { $limit: 4 },
         ]),
+        orderModel.aggregate([
+            { $unwind: "$items" },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "items.product",
+                    foreignField: "_id",
+                    as: "prod",
+                },
+            },
+            { $unwind: { path: "$prod", preserveNullAndEmptyArrays: false } },
+            {
+                $group: {
+                    _id: "$prod.category",
+                    totalSold: { $sum: "$items.quantity" },
+                    totalRevenue: { $sum: { $multiply: ["$items.price.amount", "$items.quantity"] } },
+                },
+            },
+            { $sort: { totalSold: -1 } },
+            { $limit: 5 },
+        ]),
+        userModel.countDocuments({ role: "buyer", createdAt: { $gte: startOfMonth } }),
+        productModel.countDocuments({ inStock: false }),
     ]);
 
     const totalRevenue = revenueData[0]?.total || 0;
@@ -80,6 +108,9 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
             recentProducts,
             recentOrders,
             bestSellingProducts,
+            topCategories,
+            newUsersThisMonth,
+            outOfStockCount,
         },
     });
 });
