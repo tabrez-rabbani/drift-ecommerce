@@ -58,7 +58,7 @@ export default function Footer() {
 
         <div className={styles.mainContent}>
           <div className={styles.column}>
-            <h3 className={`${styles.colTitle} ${styles.aboutTitle}`}>About Us.</h3>
+            <h3 className={`${styles.colTitle} ${styles.aboutTitle}`}>About Us</h3>
             <p className={`${styles.aboutText} ${styles.aboutDesc}`}>
               Drift is a dynamic and innovative online menswear platform that offers a wide range of
               contemporary apparel and everyday styles to customers.
@@ -80,7 +80,7 @@ export default function Footer() {
           </div>
 
           <div className={styles.column}>
-            <h3 className={styles.colTitle}>Quick Link</h3>
+            <h3 className={styles.colTitle}>Quick Links</h3>
             <ul className={styles.linkList}>
               <li>
                 <Link to="/collection" className={styles.footerLink}>All Collections</Link>
