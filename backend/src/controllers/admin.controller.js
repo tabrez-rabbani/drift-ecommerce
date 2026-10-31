@@ -205,6 +205,61 @@ export const getAdminUsers = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, ...data });
 });
 
+export const globalSearch = asyncHandler(async (req, res) => {
+    const q = (req.query.q || "").trim();
+    if (!q || q.length < 2) {
+        return res.status(200).json({ success: true, products: [], orders: [], users: [] });
+    }
+
+    const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(escaped, "i");
+    const isObjectId = /^[a-f\d]{24}$/i.test(q);
+
+    const orderQuery = isObjectId
+        ? {
+            $or: [
+                { _id: q },
+                { "items.title": regex },
+                { "shippingAddress.fullName": regex },
+                { "shippingAddress.email": regex },
+            ],
+        }
+        : {
+            $or: [
+                { "items.title": regex },
+                { "shippingAddress.fullName": regex },
+                { "shippingAddress.email": regex },
+                { orderStatus: regex },
+            ],
+        };
+
+    const [products, orders, users] = await Promise.all([
+        productModel
+            .find({
+                $or: [{ title: regex }, { category: regex }, { subcategory: regex }],
+            })
+            .select("title colors price inStock")
+            .limit(5)
+            .lean(),
+        orderModel
+            .find(orderQuery)
+            .populate("user", "name email")
+            .select("user totalAmount orderStatus createdAt items shippingAddress")
+            .limit(5)
+            .lean(),
+        userModel
+            .find({
+                role: "buyer",
+                $or: [{ name: regex }, { email: regex }],
+            })
+            .select("name email createdAt")
+            .limit(5)
+            .lean(),
+    ]);
+
+    res.status(200).json({ success: true, products, orders, users });
+});
+
 export const deleteAdminUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
 

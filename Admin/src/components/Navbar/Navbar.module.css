@@ -69,14 +69,15 @@
 .navbar__searchInput {
   flex: 1;
   height: 100%;
-  background-color: #141619; /* Darker input background */
+  background-color: #141619;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-right: none;
   border-radius: 4px 0 0 4px;
   padding: 0 16px;
   color: white;
-  font-size: 18px;
+  font-size: 15px;
   outline: none;
+  cursor: pointer;
 }
 
 .navbar__searchInput::placeholder {
@@ -86,7 +87,7 @@
 .navbar__searchBtn {
   width: 48px;
   height: 100%;
-  background-color: #f39c12; /* Yellow/Orange button */
+  background-color: #f39c12;
   border: none;
   border-radius: 0 4px 4px 0;
   color: white;
