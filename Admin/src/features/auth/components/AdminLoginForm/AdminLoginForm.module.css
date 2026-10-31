@@ -27,8 +27,11 @@
 }
 
 .brandPanel__image {
-  object-fit: contain !important;
-  object-position: center !important;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .formPanel {
@@ -207,14 +210,6 @@
   border-top-color: #4285f4;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-}
-
-.suspenseFallback {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f9f9f9;
 }
 
 @keyframes spin {
