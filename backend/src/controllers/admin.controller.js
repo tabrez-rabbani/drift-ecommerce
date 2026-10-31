@@ -135,7 +135,6 @@ export const getDashboardStats = asyncHandler(async (_req, res) => {
     res.status(200).json({
         success: true,
         stats: {
-            totalContacts: 0,
             totalOrders,
             totalProducts,
             totalUsers,

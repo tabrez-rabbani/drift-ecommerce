@@ -1,10 +1,10 @@
 import { useDashboard } from "../hooks/useDashboard";
 import StatCards from "../components/StatCards/StatCards";
-import OrderStatusBanner from "../components/OrderStatusBanner/OrderStatusBanner";
 import OrderTrendsChart from "../components/OrderTrendsChart/OrderTrendsChart";
+import OrdersOverview from "../components/OrdersOverview/OrdersOverview";
 import RevenueTrendChart from "../components/RevenueTrendChart/RevenueTrendChart";
-import BestSellingList from "../components/BestSellingList/BestSellingList";
 import TopCategoriesList from "../components/TopCategoriesList/TopCategoriesList";
+import BestSellingList from "../components/BestSellingList/BestSellingList";
 import RecentProductsList from "../components/RecentProductsList/RecentProductsList";
 import RecentOrdersList from "../components/RecentOrdersList/RecentOrdersList";
 import styles from "./DashboardPage.module.css";
@@ -25,12 +25,6 @@ export default function DashboardPage() {
     <div className={styles.container}>
       <StatCards stats={stats} loading={loading} />
 
-      <OrderStatusBanner
-        orderStatusBreakdown={stats.orderStatusBreakdown}
-        totalOrders={stats.totalOrders}
-        loading={loading}
-      />
-
       <div className={styles.showcaseGrid}>
         <OrderTrendsChart
           monthlyCounts={monthlyCounts}
@@ -38,17 +32,18 @@ export default function DashboardPage() {
           totalOrdersThisYear={totalOrdersThisYear}
           loading={loading}
         />
-        <RevenueTrendChart
-          monthlyRevenue={monthlyRevenue}
-          maxRevenue={maxRevenue}
-          totalRevenueThisYear={totalRevenueThisYear}
+        <OrdersOverview
+          orderStatusBreakdown={stats.orderStatusBreakdown}
+          totalOrders={stats.totalOrders}
           loading={loading}
         />
       </div>
 
       <div className={styles.showcaseGrid}>
-        <BestSellingList
-          bestSellingProducts={stats.bestSellingProducts}
+        <RevenueTrendChart
+          monthlyRevenue={monthlyRevenue}
+          maxRevenue={maxRevenue}
+          totalRevenueThisYear={totalRevenueThisYear}
           loading={loading}
         />
         <TopCategoriesList
@@ -58,10 +53,17 @@ export default function DashboardPage() {
       </div>
 
       <div className={styles.showcaseGrid}>
+        <BestSellingList
+          bestSellingProducts={stats.bestSellingProducts}
+          loading={loading}
+        />
         <RecentProductsList
           recentProducts={stats.recentProducts}
           loading={loading}
         />
+      </div>
+
+      <div className={styles.fullWidthRow}>
         <RecentOrdersList
           recentOrders={stats.recentOrders}
           loading={loading}

@@ -18,7 +18,6 @@ export const MONTH_NAMES = [
 ];
 
 const INITIAL_STATS = {
-  totalContacts: 0,
   totalOrders: 0,
   totalProducts: 0,
   totalUsers: 0,

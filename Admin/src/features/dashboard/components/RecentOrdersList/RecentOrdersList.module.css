@@ -24,6 +24,24 @@
   margin: 0;
 }
 
+.actionBtn {
+  background: none;
+  border: none;
+  color: #a0a5b1;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+
+.actionBtn:hover {
+  color: #02a9f7;
+}
+
 .listContainer {
   display: flex;
   flex-direction: column;

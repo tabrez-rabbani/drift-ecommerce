@@ -1,4 +1,5 @@
-import { Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Loader2 } from "lucide-react";
 import styles from "./RecentOrdersList.module.css";
 
 function formatDate(dateString) {
@@ -32,6 +33,10 @@ export default function RecentOrdersList({ recentOrders, loading }) {
     <div className={styles.sectionCard}>
       <div className={styles.sectionHeader}>
         <h2 className={styles.sectionTitle}>Recent Orders</h2>
+        <Link to="/admin/orders/users-orders" className={styles.actionBtn}>
+          View All
+          <ArrowRight size={14} />
+        </Link>
       </div>
 
       {loading ? (
