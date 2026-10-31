@@ -49,7 +49,7 @@
 }
 
 .spinner {
-  color: #22c55e;
+  color: #06b6d4;
   animation: spin 1s linear infinite;
 }
 
@@ -78,13 +78,13 @@
 }
 
 .barRect {
-  fill: #22c55e;
+  fill: #06b6d4;
   cursor: pointer;
   transition: fill 0.2s, opacity 0.2s;
 }
 
 .barRect:hover {
-  fill: #4ade80;
+  fill: #22d3ee;
   opacity: 0.9;
 }
 
