@@ -43,6 +43,7 @@ export const config = {
     CLIENT_URL: process.env.CLIENT_URL || "http://localhost:5173",
     ADMIN_URL: process.env.ADMIN_URL || "http://localhost:5175",
     COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || undefined,
+    REDIS_URL: process.env.REDIS_URL || "redis://127.0.0.1:6379",
 };
 
 export default config;

@@ -2,9 +2,13 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import { createProduct as createProductService, getAllProducts as getAllProductsService, getProductDetails as getProductDetailsService, deleteProduct, updateProduct, getAvailableColors, searchProducts as searchProductsService } from "../services/product.service.js";
 import { getProductById } from "../dao/product.dao.js";
 import AppError from "../utils/AppError.js";
+import { clearCachePattern } from "../middlewares/cacheMiddleware.js";
 
 export const createProduct = asyncHandler(async (req, res) => {
     const product = await createProductService(req.body, req.files, req.user._id);
+
+    // Invalidate product catalog cache
+    await clearCachePattern("products:*");
 
     res.status(201).json({
         success: true,
@@ -15,6 +19,9 @@ export const createProduct = asyncHandler(async (req, res) => {
 
 export const editProduct = asyncHandler(async (req, res) => {
     const product = await updateProduct(req.params.id, req.body, req.files);
+
+    // Invalidate product catalog cache
+    await clearCachePattern("products:*");
 
     res.status(200).json({
         success: true,
@@ -66,6 +73,9 @@ export const getAdminProductById = asyncHandler(async (req, res) => {
 
 export const removeProduct = asyncHandler(async (req, res) => {
     await deleteProduct(req.params.id);
+
+    // Invalidate product catalog cache
+    await clearCachePattern("products:*");
 
     res.status(200).json({
         success: true,
